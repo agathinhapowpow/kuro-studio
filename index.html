@@ -753,6 +753,50 @@
       pointer-events: none;
       will-change: transform;
     }
+    /* ===================================================
+       CUSTOM CURSOR
+    =================================================== */
+    body { cursor: none; }
+
+    #cursor-dot,
+    #cursor-ring {
+      position: fixed;
+      top: -100px;
+      left: -100px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+
+    #cursor-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--kuro-accent);
+      transition: opacity 300ms ease;
+    }
+
+    #cursor-ring {
+      width: 28px;
+      height: 28px;
+      border: 1px solid rgba(196, 192, 182, 0.4);
+      transition: width  400ms var(--ease-out-expo),
+                  height 400ms var(--ease-out-expo),
+                  opacity 400ms ease,
+                  border-color 400ms ease;
+    }
+
+    body.cursor-hover #cursor-ring {
+      width: 44px;
+      height: 44px;
+      border-color: rgba(196, 192, 182, 0.7);
+    }
+
+    /* Disable on touch devices */
+    @media (hover: none) {
+      #cursor-dot, #cursor-ring { display: none; }
+      body { cursor: auto; }
+    }
   </style>
 </head>
 <body>
@@ -767,6 +811,10 @@
 
 <!-- SCROLL PROGRESS -->
 <div id="scroll-progress" aria-hidden="true"></div>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor-dot"  aria-hidden="true"></div>
+<div id="cursor-ring" aria-hidden="true"></div>
 
   <!-- ================================================
        NAV
@@ -1065,6 +1113,52 @@
         magneticEl.style.transform  = 'translate(0, 0)';
       });
     }
+
+    /* ================================================
+       CUSTOM CURSOR
+    ================================================ */
+    (function initCursor() {
+      const dot  = document.getElementById('cursor-dot');
+      const ring = document.getElementById('cursor-ring');
+
+      if (!dot || !ring) return;
+
+      let mouseX = -100, mouseY = -100;
+      let ringX  = -100, ringY  = -100;
+      let rafStarted = false;
+
+      function tick() {
+        // Dot follows instantly
+        dot.style.left = mouseX + 'px';
+        dot.style.top  = mouseY + 'px';
+
+        // Ring lerps toward dot
+        ringX += (mouseX - ringX) * 0.12;
+        ringY += (mouseY - ringY) * 0.12;
+        ring.style.left = ringX + 'px';
+        ring.style.top  = ringY + 'px';
+
+        requestAnimationFrame(tick);
+      }
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        // Start rAF loop on first mouse movement, seeding ring at cursor pos
+        if (!rafStarted) {
+          rafStarted = true;
+          ringX = mouseX;
+          ringY = mouseY;
+          requestAnimationFrame(tick);
+        }
+      }, { passive: true });
+
+      // Expand ring on interactive elements
+      document.querySelectorAll('a, button, .showcase-card').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+      });
+    })();
   </script>
 </body>
 </html>
