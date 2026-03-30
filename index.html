@@ -761,12 +761,11 @@
     #cursor-dot,
     #cursor-ring {
       position: fixed;
-      top: -100px;
-      left: -100px;
+      top: 0;
+      left: 0;
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%);
     }
 
     #cursor-dot {
@@ -1128,15 +1127,13 @@
       let rafStarted = false;
 
       function tick() {
-        // Dot follows instantly
-        dot.style.left = mouseX + 'px';
-        dot.style.top  = mouseY + 'px';
+        // Dot follows instantly — transform-only, no layout
+        dot.style.transform  = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
 
         // Ring lerps toward dot
         ringX += (mouseX - ringX) * 0.12;
         ringY += (mouseY - ringY) * 0.12;
-        ring.style.left = ringX + 'px';
-        ring.style.top  = ringY + 'px';
+        ring.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
 
         requestAnimationFrame(tick);
       }
@@ -1149,6 +1146,8 @@
           rafStarted = true;
           ringX = mouseX;
           ringY = mouseY;
+          dot.style.transform  = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
+          ring.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
           requestAnimationFrame(tick);
         }
       }, { passive: true });
