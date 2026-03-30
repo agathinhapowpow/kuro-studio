@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KURO· — Motion is identity.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===================================================
+       DESIGN SYSTEM — TOKENS
+    =================================================== */
+    :root {
+      /* BACKGROUNDS */
+      --kuro-void:    #0A0A0B;
+      --kuro-surface: #141416;
+      --kuro-subtle:  #1E1E22;
+
+      /* TEXTO */
+      --kuro-text:  #E8E6E3;
+      --kuro-muted: #6B6B73;
+
+      /* ACCENT */
+      --kuro-accent:      #C4C0B6;
+      --kuro-accent-glow: rgba(196, 192, 182, 0.08);
+
+      /* BORDERS */
+      --kuro-border:       rgba(255, 255, 255, 0.06);
+      --kuro-border-hover: rgba(255, 255, 255, 0.12);
+
+      /* TIPOGRAFIA */
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+      /* Display */
+      --text-display: clamp(48px, 6.5vw, 88px);
+      --ls-display:   0.06em;
+      --lh-display:   1.08;
+      --fw-display:   700;
+
+      /* H2 */
+      --text-h2: clamp(24px, 3.2vw, 44px);
+      --ls-h2:   -0.02em;
+      --lh-h2:   1.15;
+      --fw-h2:   600;
+
+      /* H3 */
+      --text-h3: clamp(15px, 1.8vw, 20px);
+      --ls-h3:   0em;
+      --lh-h3:   1.3;
+      --fw-h3:   500;
+
+      /* Body */
+      --text-body: 16px;
+      --ls-body:   -0.011em;
+      --lh-body:   1.65;
+      --fw-body:   400;
+
+      /* Small/Label */
+      --text-small: 13px;
+      --ls-small:   0.04em;
+      --lh-small:   1.4;
+      --fw-small:   400;
+
+      /* ESPAÇAMENTO (grid 4pt) */
+      --sp-1:  4px;
+      --sp-2:  8px;
+      --sp-3:  12px;
+      --sp-4:  16px;
+      --sp-6:  24px;
+      --sp-8:  32px;
+      --sp-10: 40px;
+      --sp-12: 48px;
+      --sp-16: 64px;
+      --sp-20: 80px;
+      --sp-24: 96px;
+      --sp-32: 128px;
+      --section-y: clamp(80px, 10vw, 140px);
+
+      /* LAYOUT */
+      --container-max:    1200px;
+      --container-narrow: 800px;
+      --container-px:     clamp(20px, 5vw, 40px);
+
+      /* BORDER-RADIUS */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+
+      /* EASING */
+      --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+      /* DURATIONS */
+      --duration-fast:   400ms;
+      --duration-normal: 700ms;
+      --duration-slow:   1000ms;
+      --duration-reveal: 900ms;
+    }
+
+    /* ===================================================
+       RESET & BASE
+    =================================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      font-size: var(--text-body);
+      font-weight: var(--fw-body);
+      letter-spacing: var(--ls-body);
+      line-height: var(--lh-body);
+      color: var(--kuro-text);
+      background-color: var(--kuro-void);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-feature-settings: 'cv02','cv03','cv04','cv11';
+      overflow-x: hidden;
+    }
+
+    /* ===================================================
+       KEYFRAMES
+    =================================================== */
+    @keyframes kuro-reveal {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes line-expand {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    /* ===================================================
+       HERO WORD REVEALS (P1 — Earned entrance)
+    =================================================== */
+    .reveal {
+      display: inline-block;
+      opacity: 0;
+      animation: kuro-reveal var(--duration-reveal) var(--ease-out-expo) forwards;
+    }
+
+    /* Base delay 300ms + 100ms stagger per word */
+    .reveal-d0 { animation-delay: 300ms; }
+    .reveal-d1 { animation-delay: 400ms; }
+    .reveal-d2 { animation-delay: 500ms; }
+    .reveal-d3 { animation-delay: 600ms; }
+    .reveal-d4 { animation-delay: 700ms; }
+
+    /* ===================================================
+       SCROLL REVEAL (P2 — Scroll as narrative)
+    =================================================== */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity var(--duration-reveal) var(--ease-out-expo),
+                  transform var(--duration-reveal) var(--ease-out-expo);
+    }
+
+    .scroll-reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===================================================
+       LAYOUT HELPERS
+    =================================================== */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--container-px);
+    }
+
+    .container-narrow {
+      max-width: var(--container-narrow);
+      margin: 0 auto;
+      padding: 0 var(--container-px);
+    }
+
+    /* ===================================================
+       NAV (4.0)
+    =================================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      height: 64px;
+      background: transparent;
+      border-bottom: 1px solid transparent;
+      transition: background var(--duration-fast) var(--ease-out-quart),
+                  border-color var(--duration-fast) var(--ease-out-quart);
+    }
+
+    .nav.scrolled {
+      background: rgba(10, 10, 11, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom-color: var(--kuro-border);
+    }
+
+    .nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--kuro-text);
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .nav-logo .dot {
+      color: var(--kuro-accent);
+    }
+
+    .nav-cta-wrap {
+      position: relative;
+    }
+
+    .nav-cta {
+      font-size: var(--text-small);
+      letter-spacing: var(--ls-small);
+      color: var(--kuro-muted);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease-out-expo);
+      line-height: var(--lh-small);
+    }
+
+    .nav-cta:hover {
+      color: var(--kuro-text);
+    }
+
+    .nav-cta-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--kuro-accent);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--duration-fast) var(--ease-out-expo);
+    }
+
+    .nav-cta-wrap:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* ===================================================
+       HERO (4.1)
+    =================================================== */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--section-y) var(--container-px);
+      background: var(--kuro-void);
+      text-align: center;
+    }
+
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-headline {
+      font-size: var(--text-display);
+      font-weight: var(--fw-display);
+      letter-spacing: var(--ls-display);
+      line-height: var(--lh-display);
+      color: var(--kuro-text);
+      text-align: center;
+    }
+
+    /* Spacing between inline-block words */
+    .hero-headline .reveal + .reveal {
+      margin-left: 0.28em;
+    }
+
+    /* Reset margin-left after a line break */
+    .hero-headline br + .reveal {
+      margin-left: 0;
+    }
+
+    /* Hero separator line */
+    .hero-separator {
+      width: 120px;
+      height: 1px;
+      background: var(--kuro-accent);
+      margin: var(--sp-8) auto;
+      transform: scaleX(0);
+      transform-origin: center;
+      animation: line-expand 600ms var(--ease-out-expo) 600ms forwards;
+    }
+
+    /* Hero tagline */
+    .hero-tagline {
+      font-size: var(--text-small);
+      letter-spacing: var(--ls-small);
+      color: var(--kuro-muted);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: kuro-reveal var(--duration-reveal) var(--ease-out-expo) 750ms forwards;
+    }
+
+    /* ===================================================
+       MANIFESTO (4.2)
+    =================================================== */
+    .manifesto {
+      padding: var(--section-y) var(--container-px);
+      background: var(--kuro-void);
+    }
+
+    .manifesto-inner {
+      max-width: var(--container-narrow);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .manifesto-text {
+      font-size: var(--text-h2);
+      font-weight: var(--fw-h2);
+      letter-spacing: var(--ls-h2);
+      line-height: var(--lh-h2);
+      color: var(--kuro-text);
+      text-align: center;
+    }
+
+    /* Each line starts dim, lights up on scroll */
+    .scroll-line {
+      display: block;
+      opacity: 0.15;
+      color: var(--kuro-muted);
+      transition: opacity 600ms var(--ease-out-expo),
+                  color 600ms var(--ease-out-expo);
+    }
+
+    .scroll-line.is-lit {
+      opacity: 1;
+      color: var(--kuro-text);
+    }
+
+    /* ===================================================
+       SHOWCASE (4.3)
+    =================================================== */
+    .showcase {
+      padding: var(--section-y) var(--container-px);
+      background: var(--kuro-void);
+    }
+
+    .showcase-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .showcase-label {
+      font-size: var(--text-small);
+      letter-spacing: var(--ls-small);
+      color: var(--kuro-muted);
+      text-transform: uppercase;
+      line-height: var(--lh-small);
+      margin-bottom: var(--sp-12);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--sp-4);
+    }
+
+    .showcase-card {
+      aspect-ratio: 16 / 10;
+      background: var(--kuro-surface);
+      border: 1px solid var(--kuro-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      padding: var(--sp-8);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition:
+        transform var(--duration-fast) var(--ease-out-expo),
+        background var(--duration-fast) var(--ease-out-expo),
+        border-color var(--duration-fast) var(--ease-out-expo);
+    }
+
+    .showcase-card:hover {
+      background: var(--kuro-subtle);
+      border-color: var(--kuro-border-hover);
+      transform: translateY(-2px);
+    }
+
+    .showcase-card-name {
+      font-size: var(--text-h3);
+      font-weight: var(--fw-h3);
+      color: var(--kuro-text);
+      letter-spacing: var(--ls-h3);
+      line-height: var(--lh-h3);
+    }
+
+    .showcase-card-meta {
+      font-size: var(--text-small);
+      color: var(--kuro-muted);
+      letter-spacing: var(--ls-small);
+      line-height: var(--lh-small);
+      margin-top: var(--sp-2);
+    }
+
+    .showcase-card-arrow {
+      position: absolute;
+      bottom: var(--sp-8);
+      right: var(--sp-8);
+      font-size: var(--text-small);
+      color: var(--kuro-accent);
+      opacity: 0;
+      transform: translate(-4px, 4px);
+      transition:
+        opacity var(--duration-fast) var(--ease-out-expo),
+        transform var(--duration-fast) var(--ease-out-expo);
+    }
+
+    .showcase-card:hover .showcase-card-arrow {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+
+    /* ===================================================
+       PROCESSO (4.4)
+    =================================================== */
+    .processo {
+      padding: var(--section-y) var(--container-px);
+      background: var(--kuro-void);
+    }
+
+    .processo-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* Timeline line — grows left to right on scroll */
+    .processo-timeline {
+      position: absolute;
+      top: 20px; /* aligns with center of number text */
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--kuro-border);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 1200ms var(--ease-out-expo);
+    }
+
+    .processo-timeline.is-visible {
+      transform: scaleX(1);
+    }
+
+    .processo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .processo-step {
+      padding-top: var(--sp-8);
+    }
+
+    .processo-number {
+      font-size: var(--text-small);
+      color: var(--kuro-accent);
+      letter-spacing: var(--ls-small);
+      font-variant-numeric: tabular-nums;
+      font-weight: var(--fw-small);
+      line-height: var(--lh-small);
+    }
+
+    .processo-title {
+      font-size: var(--text-h3);
+      font-weight: var(--fw-h3);
+      color: var(--kuro-text);
+      letter-spacing: var(--ls-h3);
+      line-height: var(--lh-h3);
+      margin-top: var(--sp-3);
+    }
+
+    /* ===================================================
+       CTA (4.5)
+    =================================================== */
+    .cta {
+      padding: var(--sp-32) var(--container-px);
+      background: var(--kuro-void);
+    }
+
+    .cta-inner {
+      max-width: var(--container-narrow);
+      margin: 0 auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .cta-h2 {
+      font-size: var(--text-h2);
+      font-weight: var(--fw-h2);
+      letter-spacing: var(--ls-h2);
+      line-height: var(--lh-h2);
+      color: var(--kuro-text);
+      text-align: center;
+    }
+
+    .cta-sub {
+      font-size: var(--text-body);
+      color: var(--kuro-muted);
+      text-align: center;
+      letter-spacing: var(--ls-body);
+      line-height: var(--lh-body);
+      margin-top: var(--sp-4);
+    }
+
+    .cta-email-wrap {
+      margin-top: var(--sp-10);
+    }
+
+    .magnetic-cta {
+      font-size: var(--text-body);
+      color: var(--kuro-accent);
+      text-decoration: none;
+      letter-spacing: var(--ls-body);
+      display: inline-block;
+      position: relative;
+    }
+
+    /* ===================================================
+       FOOTER (4.6)
+    =================================================== */
+    .footer {
+      border-top: 1px solid var(--kuro-border);
+      padding: var(--sp-8) var(--container-px);
+    }
+
+    .footer-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-size: var(--text-small);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--kuro-text);
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .footer-logo .dot {
+      color: var(--kuro-accent);
+    }
+
+    .footer-locations {
+      font-size: var(--text-small);
+      color: var(--kuro-muted);
+      letter-spacing: var(--ls-small);
+      line-height: var(--lh-small);
+    }
+
+    .footer-copyright {
+      text-align: center;
+      font-size: var(--text-small);
+      color: var(--kuro-muted);
+      letter-spacing: var(--ls-small);
+      margin-top: var(--sp-6);
+    }
+
+    /* ===================================================
+       RESPONSIVIDADE (5)
+    =================================================== */
+    @media (max-width: 768px) {
+      .hero-headline {
+        font-size: clamp(36px, 9vw, 48px);
+      }
+
+      .manifesto-text {
+        font-size: clamp(20px, 5vw, 28px);
+      }
+
+      .showcase-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .showcase-card {
+        aspect-ratio: 16 / 9;
+      }
+
+      .processo-grid {
+        grid-template-columns: 1fr;
+        gap: var(--sp-8);
+      }
+
+      .processo-timeline {
+        display: none;
+      }
+
+      .processo-step {
+        padding-top: 0;
+      }
+
+      .nav-cta-wrap {
+        display: none;
+      }
+    }
+
+    /* ===================================================
+       PREFERS-REDUCED-MOTION (5)
+    =================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .scroll-reveal,
+      .scroll-line,
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .scroll-line {
+        color: var(--kuro-text) !important;
+      }
+
+      .hero-separator {
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================================
+       NAV
+  ================================================ -->
+  <nav class="nav" id="nav" aria-label="Primary navigation">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo" aria-label="KURO Studio home">KURO<span class="dot" aria-hidden="true">·</span></a>
+      <div class="nav-cta-wrap">
+        <a href="mailto:hello@kuro.studio" class="nav-cta">hello@kuro.studio</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================================================
+       HERO (4.1)
+  ================================================ -->
+  <section class="hero" aria-labelledby="hero-heading">
+    <div class="hero-inner">
+      <h1 class="hero-headline" id="hero-heading">
+        <span class="reveal reveal-d0">We</span>
+        <span class="reveal reveal-d1">don't</span>
+        <span class="reveal reveal-d2">decorate.</span>
+        <br>
+        <span class="reveal reveal-d3">We</span>
+        <span class="reveal reveal-d4">choreograph.</span>
+      </h1>
+      <div class="hero-separator" aria-hidden="true"></div>
+      <p class="hero-tagline">Motion is identity.</p>
+    </div>
+  </section>
+
+  <!-- ================================================
+       MANIFESTO (4.2)
+  ================================================ -->
+  <section class="manifesto" aria-label="Manifesto">
+    <div class="manifesto-inner">
+      <p class="manifesto-text">
+        <span class="line scroll-line">Every transition tells a story.</span>
+        <span class="line scroll-line">Every pause is intentional.</span>
+        <span class="line scroll-line">We believe motion isn't ornament —</span>
+        <span class="line scroll-line">it's the language your brand speaks</span>
+        <span class="line scroll-line">when no one is reading.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SHOWCASE (4.3)
+  ================================================ -->
+  <section class="showcase" aria-labelledby="showcase-label">
+    <div class="showcase-inner">
+      <p class="showcase-label scroll-reveal" id="showcase-label">Selected work.</p>
+      <div class="showcase-grid">
+
+        <article class="showcase-card scroll-reveal" data-delay="0" aria-label="AURA project">
+          <div>
+            <div class="showcase-card-name">AURA</div>
+            <div class="showcase-card-meta">Brand Identity &amp; Motion System · 2024</div>
+          </div>
+          <span class="showcase-card-arrow" aria-hidden="true">→</span>
+        </article>
+
+        <article class="showcase-card scroll-reveal" data-delay="80" aria-label="VANTA project">
+          <div>
+            <div class="showcase-card-name">VANTA</div>
+            <div class="showcase-card-meta">Product Launch Campaign · 2024</div>
+          </div>
+          <span class="showcase-card-arrow" aria-hidden="true">→</span>
+        </article>
+
+        <article class="showcase-card scroll-reveal" data-delay="160" aria-label="SOLIS project">
+          <div>
+            <div class="showcase-card-name">SOLIS</div>
+            <div class="showcase-card-meta">E-commerce Experience · 2023</div>
+          </div>
+          <span class="showcase-card-arrow" aria-hidden="true">→</span>
+        </article>
+
+        <article class="showcase-card scroll-reveal" data-delay="240" aria-label="NØRD project">
+          <div>
+            <div class="showcase-card-name">NØRD</div>
+            <div class="showcase-card-meta">Digital Editorial · 2023</div>
+          </div>
+          <span class="showcase-card-arrow" aria-hidden="true">→</span>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       PROCESSO (4.4)
+  ================================================ -->
+  <section class="processo" aria-label="Process">
+    <div class="processo-inner" id="processo-inner">
+      <div class="processo-timeline" id="processo-timeline" aria-hidden="true"></div>
+      <div class="processo-grid">
+
+        <div class="processo-step scroll-reveal" data-delay="0">
+          <div class="processo-number">01</div>
+          <div class="processo-title">Brief</div>
+        </div>
+
+        <div class="processo-step scroll-reveal" data-delay="120">
+          <div class="processo-number">02</div>
+          <div class="processo-title">Direction</div>
+        </div>
+
+        <div class="processo-step scroll-reveal" data-delay="240">
+          <div class="processo-number">03</div>
+          <div class="processo-title">Choreography</div>
+        </div>
+
+        <div class="processo-step scroll-reveal" data-delay="360">
+          <div class="processo-number">04</div>
+          <div class="processo-title">Code</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       CTA (4.5)
+  ================================================ -->
+  <section class="cta" aria-labelledby="cta-heading">
+    <div class="cta-inner">
+      <h2 class="cta-h2 scroll-reveal" id="cta-heading">Start a conversation.</h2>
+      <p class="cta-sub scroll-reveal" data-delay="80">New projects begin with a single message.</p>
+      <div class="cta-email-wrap scroll-reveal" data-delay="160">
+        <a href="mailto:hello@kuro.studio" class="magnetic-cta">hello@kuro.studio</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       FOOTER (4.6)
+  ================================================ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <a href="#" class="footer-logo" aria-label="KURO Studio">KURO<span class="dot" aria-hidden="true">·</span></a>
+        <span class="footer-locations">Tokyo / São Paulo / Remote</span>
+      </div>
+      <p class="footer-copyright">© 2026 KURO Studio</p>
+    </div>
+  </footer>
+
+  <script>
+    /* ================================================
+       NAV — scroll state
+    ================================================ */
+    const nav = document.getElementById('nav');
+
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 80);
+    }, { passive: true });
+
+
+    /* ================================================
+       SCROLL REVEAL — IntersectionObserver (P2)
+       Supports data-delay attribute for stagger
+    ================================================ */
+    const scrollRevealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+
+        const delay = parseInt(entry.target.dataset.delay || '0', 10);
+        entry.target.style.transitionDelay = delay + 'ms';
+        entry.target.classList.add('is-visible');
+
+        // Clear the delay after the animation so hover transitions are instant
+        setTimeout(() => {
+          entry.target.style.transitionDelay = '';
+        }, delay + 1000);
+
+        scrollRevealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+      scrollRevealObserver.observe(el);
+    });
+
+
+    /* ================================================
+       MANIFESTO LINES — progressive scroll lighting (P2)
+    ================================================ */
+    const manifestoLines = document.querySelectorAll('.scroll-line');
+
+    manifestoLines.forEach((line, index) => {
+      // Each line has a progressively tighter rootMargin,
+      // so they "light up" sequentially as the user scrolls down
+      const topOffset  = 10 + index * 8;
+      const btmOffset  = 25;
+
+      const lineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            line.classList.add('is-lit');
+          }
+        });
+      }, {
+        threshold: 0.5,
+        rootMargin: `-${topOffset}% 0px -${btmOffset}% 0px`
+      });
+
+      lineObserver.observe(line);
+    });
+
+
+    /* ================================================
+       PROCESSO TIMELINE — grows scaleX as section enters
+    ================================================ */
+    const processoTimeline = document.getElementById('processo-timeline');
+    const processoInner    = document.getElementById('processo-inner');
+
+    if (processoInner && processoTimeline) {
+      const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            processoTimeline.classList.add('is-visible');
+            timelineObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      timelineObserver.observe(processoInner);
+    }
+
+
+    /* ================================================
+       MAGNETIC CTA (P3 — Hover as dialogue)
+    ================================================ */
+    const magneticEl = document.querySelector('.magnetic-cta');
+
+    if (magneticEl) {
+      magneticEl.addEventListener('mouseenter', () => {
+        magneticEl.style.transition = 'none';
+      });
+
+      magneticEl.addEventListener('mousemove', (e) => {
+        const rect = magneticEl.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width  / 2;
+        const y = e.clientY - rect.top  - rect.height / 2;
+        magneticEl.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+      });
+
+      magneticEl.addEventListener('mouseleave', () => {
+        magneticEl.style.transition = `transform 500ms cubic-bezier(0.16, 1, 0.3, 1)`;
+        magneticEl.style.transform  = 'translate(0, 0)';
+      });
+    }
+  </script>
+</body>
+</html>
