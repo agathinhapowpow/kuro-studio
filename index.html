@@ -391,6 +391,7 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: var(--sp-4);
+      perspective: 1000px;
     }
 
     .showcase-card {
@@ -405,6 +406,7 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      transform-style: preserve-3d;
       transition:
         transform var(--duration-fast) var(--ease-out-expo),
         background var(--duration-fast) var(--ease-out-expo),
@@ -1195,6 +1197,28 @@
 
       document.querySelectorAll('.hero-headline .reveal').forEach((word, i) => {
         setTimeout(() => scramble(word), WORD_DELAYS[i]);
+      });
+    })();
+
+    /* ================================================
+       CARD 3D PERSPECTIVE HOVER
+    ================================================ */
+    (function initCard3D() {
+      if (REDUCED_MOTION) return;
+
+      document.querySelectorAll('.showcase-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const relX =  (e.clientX - rect.left)  / rect.width  - 0.5;
+          const relY =  (e.clientY - rect.top)   / rect.height - 0.5;
+          const rotX = relY * -6;
+          const rotY = relX *  6;
+          card.style.transform = `translateY(-2px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
       });
     })();
   </script>
