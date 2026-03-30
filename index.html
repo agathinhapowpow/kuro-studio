@@ -905,7 +905,9 @@
        FOG — cursor parallax + scroll fade
     ================================================ */
     (function initFog() {
+      if (REDUCED_MOTION) return;
       const fog = document.getElementById('kuro-fog');
+      if (!fog) return;
       const blobs = [
         { el: document.getElementById('fog-1'), factor: 0.04 },
         { el: document.getElementById('fog-2'), factor: 0.03 },
@@ -924,8 +926,9 @@
 
       // Scroll fade — fog dims as user scrolls down (never disappears fully)
       window.addEventListener('scroll', () => {
-        const progress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-        fog.style.opacity = String(1 - Math.min(progress, 1) * 0.6);
+        const scrollable = document.body.scrollHeight - window.innerHeight;
+        const progress   = scrollable > 0 ? window.scrollY / scrollable : 0;
+        fog.style.opacity = `${1 - Math.min(progress, 1) * 0.6}`;
       }, { passive: true });
     })();
 
