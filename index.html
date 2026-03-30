@@ -896,6 +896,41 @@
 
   <script>
     /* ================================================
+       REDUCED MOTION — global flag used by all JS features
+    ================================================ */
+    const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+
+    /* ================================================
+       FOG — cursor parallax + scroll fade
+    ================================================ */
+    (function initFog() {
+      const fog = document.getElementById('kuro-fog');
+      const blobs = [
+        { el: document.getElementById('fog-1'), factor: 0.04 },
+        { el: document.getElementById('fog-2'), factor: 0.03 },
+        { el: document.getElementById('fog-3'), factor: 0.025 },
+        { el: document.getElementById('fog-4'), factor: 0.015 },
+      ];
+
+      // Cursor parallax — outer blob wrapper shifts toward cursor
+      window.addEventListener('mousemove', (e) => {
+        const cx = e.clientX - window.innerWidth  / 2;
+        const cy = e.clientY - window.innerHeight / 2;
+        blobs.forEach(({ el, factor }) => {
+          el.style.transform = `translate(${cx * factor}px, ${cy * factor}px)`;
+        });
+      }, { passive: true });
+
+      // Scroll fade — fog dims as user scrolls down (never disappears fully)
+      window.addEventListener('scroll', () => {
+        const progress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+        fog.style.opacity = String(1 - Math.min(progress, 1) * 0.6);
+      }, { passive: true });
+    })();
+
+
+    /* ================================================
        NAV — scroll state
     ================================================ */
     const nav = document.getElementById('nav');
