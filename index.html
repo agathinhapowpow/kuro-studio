@@ -735,6 +735,24 @@
       position: relative;
       z-index: 1;
     }
+
+    /* ===================================================
+       SCROLL PROGRESS BAR
+    =================================================== */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--kuro-accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      z-index: 101;
+      opacity: 0.6;
+      pointer-events: none;
+      will-change: transform;
+    }
   </style>
 </head>
 <body>
@@ -746,6 +764,9 @@
   <div class="fog-blob" id="fog-3"><div class="fog-blob-inner"></div></div>
   <div class="fog-blob" id="fog-4"><div class="fog-blob-inner"></div></div>
 </div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress" aria-hidden="true"></div>
 
   <!-- ================================================
        NAV
@@ -936,10 +957,17 @@
     /* ================================================
        NAV — scroll state
     ================================================ */
-    const nav = document.getElementById('nav');
+    const nav             = document.getElementById('nav');
+    const scrollProgressBar = document.getElementById('scroll-progress');
 
     window.addEventListener('scroll', () => {
+      // Nav blur
       nav.classList.toggle('scrolled', window.scrollY > 80);
+
+      // Progress bar
+      const scrollable = document.body.scrollHeight - window.innerHeight;
+      const progress   = scrollable > 0 ? window.scrollY / scrollable : 0;
+      scrollProgressBar.style.transform = `scaleX(${Math.min(progress, 1)})`;
     }, { passive: true });
 
 
