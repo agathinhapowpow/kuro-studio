@@ -671,9 +671,79 @@
         transform: none !important;
       }
     }
+
+/* ===================================================
+   NÉVOA FOG LAYER
+=================================================== */
+#kuro-fog {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Outer: receives JS cursor-parallax transform only */
+.fog-blob {
+  position: absolute;
+  will-change: transform;
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Inner: CSS drift animation + visual gradient */
+.fog-blob-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+#fog-1 { width: 600px; height: 600px; top: -100px;  left: -150px;  }
+#fog-2 { width: 500px; height: 500px; bottom: -80px; right: -100px; }
+#fog-3 { width: 400px; height: 400px; top: 40%;     right: 10%;    }
+#fog-4 { width: 350px; height: 350px; bottom: 20%;  left: 5%;      }
+
+#fog-1 .fog-blob-inner { background: radial-gradient(circle, rgba(196,192,182,0.07) 0%, transparent 70%); animation: fog-drift-1 22s ease-in-out infinite; }
+#fog-2 .fog-blob-inner { background: radial-gradient(circle, rgba(196,192,182,0.05) 0%, transparent 70%); animation: fog-drift-2 28s ease-in-out infinite; }
+#fog-3 .fog-blob-inner { background: radial-gradient(circle, rgba(138,138,150,0.04) 0%, transparent 70%); animation: fog-drift-3 18s ease-in-out infinite; }
+#fog-4 .fog-blob-inner { background: radial-gradient(circle, rgba(196,192,182,0.04) 0%, transparent 70%); animation: fog-drift-4 24s ease-in-out infinite; }
+
+@keyframes fog-drift-1 {
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(60px, -40px); }
+  66%      { transform: translate(-30px, 50px); }
+}
+@keyframes fog-drift-2 {
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(-50px, 40px); }
+  66%      { transform: translate(40px, -30px); }
+}
+@keyframes fog-drift-3 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-40px, 30px); }
+}
+@keyframes fog-drift-4 {
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(30px, 40px); }
+  66%      { transform: translate(-20px, -30px); }
+}
+
+/* Lift all page sections above the fog */
+.hero, .manifesto, .showcase, .processo, .cta, .footer {
+  position: relative;
+  z-index: 1;
+}
   </style>
 </head>
 <body>
+
+<!-- NÉVOA FOG LAYER -->
+<div id="kuro-fog" aria-hidden="true">
+  <div class="fog-blob" id="fog-1"><div class="fog-blob-inner"></div></div>
+  <div class="fog-blob" id="fog-2"><div class="fog-blob-inner"></div></div>
+  <div class="fog-blob" id="fog-3"><div class="fog-blob-inner"></div></div>
+  <div class="fog-blob" id="fog-4"><div class="fog-blob-inner"></div></div>
+</div>
 
   <!-- ================================================
        NAV
