@@ -96,6 +96,16 @@
       --duration-normal: 700ms;
       --duration-slow:   1000ms;
       --duration-reveal: 900ms;
+
+      /* === FOG GRADIENTS === */
+      --kuro-fog-warm-07: rgba(196, 192, 182, 0.07);
+      --kuro-fog-warm-05: rgba(196, 192, 182, 0.05);
+      --kuro-fog-warm-04: rgba(196, 192, 182, 0.04);
+      --kuro-fog-cool-04: rgba(138, 138, 150, 0.04);
+
+      /* === CURSOR === */
+      --kuro-cursor-ring:       rgba(196, 192, 182, 0.4);
+      --kuro-cursor-ring-hover: rgba(196, 192, 182, 0.7);
     }
 
     /* ===================================================
@@ -708,10 +718,10 @@
     #fog-3 { width: 400px; height: 400px; top: 40%;     right: 10%;    }
     #fog-4 { width: 350px; height: 350px; bottom: 20%;  left: 5%;      }
 
-    #fog-1 .fog-blob-inner { background: radial-gradient(circle, rgba(196,192,182,0.07) 0%, transparent 70%); animation: fog-drift-1 22s ease-in-out infinite; }
-    #fog-2 .fog-blob-inner { background: radial-gradient(circle, rgba(196,192,182,0.05) 0%, transparent 70%); animation: fog-drift-2 28s ease-in-out infinite; }
-    #fog-3 .fog-blob-inner { background: radial-gradient(circle, rgba(138,138,150,0.04) 0%, transparent 70%); animation: fog-drift-3 18s ease-in-out infinite; }
-    #fog-4 .fog-blob-inner { background: radial-gradient(circle, rgba(196,192,182,0.04) 0%, transparent 70%); animation: fog-drift-4 24s ease-in-out infinite; }
+    #fog-1 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-warm-07) 0%, transparent 70%); animation: fog-drift-1 22s ease-in-out infinite; }
+    #fog-2 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-warm-05) 0%, transparent 70%); animation: fog-drift-2 28s ease-in-out infinite; }
+    #fog-3 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-cool-04) 0%, transparent 70%); animation: fog-drift-3 18s ease-in-out infinite; }
+    #fog-4 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-warm-04) 0%, transparent 70%); animation: fog-drift-4 24s ease-in-out infinite; }
 
     @keyframes fog-drift-1 {
       0%, 100% { transform: translate(0, 0); }
@@ -781,7 +791,7 @@
     #cursor-ring {
       width: 28px;
       height: 28px;
-      border: 1px solid rgba(196, 192, 182, 0.4);
+      border: 1px solid var(--kuro-cursor-ring);
       transition: width  400ms var(--ease-out-expo),
                   height 400ms var(--ease-out-expo),
                   opacity 400ms ease,
@@ -791,7 +801,7 @@
     body.cursor-hover #cursor-ring {
       width: 44px;
       height: 44px;
-      border-color: rgba(196, 192, 182, 0.7);
+      border-color: var(--kuro-cursor-ring-hover);
     }
 
     /* Disable on touch devices */
