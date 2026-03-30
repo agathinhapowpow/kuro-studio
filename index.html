@@ -1170,7 +1170,7 @@
 
       function scramble(span) {
         const finalChars = span.textContent.split('');
-        const resolveAt  = finalChars.map(() => Math.floor(Math.random() * FRAMES));
+        const resolveAt  = finalChars.map(() => 1 + Math.floor(Math.random() * FRAMES));
         let frame = 0;
 
         function tick() {
@@ -1194,7 +1194,7 @@
       const WORD_DELAYS = [300, 400, 500, 600, 700];
 
       document.querySelectorAll('.hero-headline .reveal').forEach((word, i) => {
-        setTimeout(() => scramble(word), WORD_DELAYS[i] ?? 300);
+        setTimeout(() => scramble(word), WORD_DELAYS[i]);
       });
     })();
   </script>
