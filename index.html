@@ -407,6 +407,7 @@
       flex-direction: column;
       justify-content: flex-end;
       transform-style: preserve-3d;
+      will-change: transform;
       transition:
         transform var(--duration-fast) var(--ease-out-expo),
         background var(--duration-fast) var(--ease-out-expo),
@@ -1211,8 +1212,8 @@
           const rect = card.getBoundingClientRect();
           const relX =  (e.clientX - rect.left)  / rect.width  - 0.5;
           const relY =  (e.clientY - rect.top)   / rect.height - 0.5;
-          const rotX = relY * -6;
-          const rotY = relX *  6;
+          const rotX = relY * -12;
+          const rotY = relX *  12;
           card.style.transform = `translateY(-2px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
         });
 
