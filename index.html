@@ -104,8 +104,29 @@
       --kuro-fog-cool-04: rgba(138, 138, 150, 0.04);
 
       /* === CURSOR === */
-      --kuro-cursor-ring:       rgba(196, 192, 182, 0.4);
-      --kuro-cursor-ring-hover: rgba(196, 192, 182, 0.7);
+      --kuro-cursor-ring:       rgba(255, 77, 28, 0.3);
+      --kuro-cursor-ring-hover: rgba(255, 77, 28, 0.6);
+
+      /* ACCENT SECONDARY — cool indigo-violet */
+      --kuro-iris:        #7B7CF8;
+      --kuro-iris-dim:    rgba(123, 124, 248, 0.12);
+      --kuro-iris-glow:   rgba(123, 124, 248, 0.06);
+      --kuro-iris-border: rgba(123, 124, 248, 0.18);
+
+      /* GOLD ALIAS */
+      --kuro-gold:     var(--kuro-accent);
+      --kuro-gold-dim: rgba(196, 192, 182, 0.12);
+
+      /* FOG — iris-tinted variant */
+      --kuro-fog-iris-03: rgba(123, 124, 248, 0.03);
+
+      /* EMBER — dominant accent */
+      --kuro-ember:        #FF4D1C;
+      --kuro-ember-dim:    rgba(255, 77, 28, 0.12);
+      --kuro-ember-glow:   rgba(255, 77, 28, 0.06);
+      --kuro-ember-border: rgba(255, 77, 28, 0.20);
+      --kuro-fog-ember-06: rgba(255, 77, 28, 0.06);
+      --kuro-fog-ember-04: rgba(255, 77, 28, 0.04);
     }
 
     /* ===================================================
@@ -149,6 +170,11 @@
       }
     }
 
+    @keyframes pulse-bloom {
+      0%, 100% { opacity: 0.3; transform: scale(0.85); }
+      50%       { opacity: 0.8; transform: scale(1.15); }
+    }
+
     @keyframes line-expand {
       from { transform: scaleX(0); }
       to   { transform: scaleX(1); }
@@ -183,6 +209,15 @@
     .scroll-reveal.is-visible {
       opacity: 1;
       transform: translateY(0);
+    }
+
+    /* CLIP-PATH REVEAL */
+    .clip-reveal {
+      clip-path: inset(0 0 100% 0);
+      transition: clip-path var(--duration-reveal) var(--ease-out-expo);
+    }
+    .clip-reveal.is-revealed {
+      clip-path: inset(0 0 0% 0);
     }
 
     /* ===================================================
@@ -241,7 +276,20 @@
     }
 
     .nav-logo .dot {
-      color: var(--kuro-accent);
+      color: var(--kuro-ember);
+    }
+
+    /* K MARK */
+    .kuro-mark {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: var(--sp-2);
+      flex-shrink: 0;
+    }
+    .nav-logo .kuro-mark,
+    .footer-logo .kuro-mark {
+      width: 18px;
+      height: 18px;
     }
 
     .nav-cta-wrap {
@@ -268,7 +316,7 @@
       left: 0;
       width: 100%;
       height: 1px;
-      background: var(--kuro-accent);
+      background: var(--kuro-ember);
       transform: scaleX(0);
       transform-origin: right;
       transition: transform var(--duration-fast) var(--ease-out-expo);
@@ -288,14 +336,31 @@
       align-items: center;
       justify-content: center;
       padding: var(--section-y) var(--container-px);
-      background: var(--kuro-void);
+      background-color: var(--kuro-void);
+      background-image: radial-gradient(circle, rgba(255,77,28,0.07) 1px, transparent 1px);
+      background-size: 32px 32px;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 55% 55% at 50% 50%, rgba(255,77,28,0.09) 0%, transparent 70%);
+      animation: pulse-bloom 5s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .hero-inner {
       display: flex;
       flex-direction: column;
       align-items: center;
+      will-change: transform;
+      position: relative;
+      z-index: 1;
     }
 
     .hero-headline {
@@ -321,7 +386,7 @@
     .hero-separator {
       width: 120px;
       height: 1px;
-      background: var(--kuro-accent);
+      background: linear-gradient(90deg, transparent, var(--kuro-ember), transparent);
       margin: var(--sp-8) auto;
       transform: scaleX(0);
       transform-origin: center;
@@ -336,6 +401,214 @@
       text-transform: uppercase;
       opacity: 0;
       animation: kuro-reveal var(--duration-reveal) var(--ease-out-expo) 750ms forwards;
+    }
+
+    /* Frame counter */
+    .hero-frame-counter {
+      position: absolute;
+      top: calc(64px + var(--sp-8));
+      right: var(--container-px);
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: var(--kuro-ember);
+      opacity: 0;
+      animation: kuro-reveal var(--duration-fast) var(--ease-out-expo) 1000ms forwards;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Hero CTA */
+    .hero-cta-wrap {
+      margin-top: var(--sp-10);
+      opacity: 0;
+      animation: kuro-reveal var(--duration-reveal) var(--ease-out-expo) 900ms forwards;
+    }
+
+    .hero-cta {
+      font-size: var(--text-body);
+      color: var(--kuro-ember);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      display: inline-block;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .hero-cta::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--kuro-ember);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 350ms var(--ease-out-expo);
+    }
+
+    .hero-cta:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* ===================================================
+       STUDIO (4.2)
+    =================================================== */
+    .studio {
+      padding: var(--section-y) var(--container-px);
+      background: var(--kuro-void);
+      position: relative;
+      z-index: 1;
+    }
+
+    .studio-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: var(--text-small);
+      letter-spacing: var(--ls-small);
+      color: var(--kuro-muted);
+      text-transform: uppercase;
+      line-height: var(--lh-small);
+      margin-bottom: var(--sp-12);
+    }
+
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-16);
+      align-items: center;
+      margin-bottom: var(--sp-16);
+    }
+
+    .studio-headline {
+      font-size: var(--text-h2);
+      font-weight: var(--fw-h2);
+      letter-spacing: var(--ls-h2);
+      line-height: var(--lh-h2);
+      color: var(--kuro-text);
+      margin-bottom: var(--sp-6);
+    }
+
+    .studio-body {
+      font-size: var(--text-body);
+      color: var(--kuro-muted);
+      letter-spacing: var(--ls-body);
+      line-height: var(--lh-body);
+    }
+
+    .studio-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-4);
+      border-top: 1px solid var(--kuro-border);
+      padding-top: var(--sp-10);
+    }
+
+    .studio-stat {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-1);
+    }
+
+    .stat-number {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--kuro-text);
+    }
+
+    .stat-value {
+      display: inline;
+    }
+
+    .stat-suffix {
+      font-size: 0.6em;
+      color: var(--kuro-ember);
+    }
+
+    .stat-label {
+      font-size: var(--text-small);
+      color: var(--kuro-muted);
+      letter-spacing: var(--ls-small);
+      text-transform: uppercase;
+    }
+
+    /* Orbit visual */
+    .orbit-container {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid var(--kuro-ember-border);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .orbit-ring--1 {
+      width: 80px;
+      height: 80px;
+      animation: orbit-spin 8s linear infinite;
+      border-color: var(--kuro-ember-border);
+    }
+
+    .orbit-ring--2 {
+      width: 160px;
+      height: 160px;
+      animation: orbit-spin 16s linear infinite reverse;
+      border-color: rgba(255, 77, 28, 0.12);
+    }
+
+    .orbit-ring--3 {
+      width: 240px;
+      height: 240px;
+      animation: orbit-spin 28s linear infinite;
+      border-color: rgba(255, 77, 28, 0.07);
+    }
+
+    .orbit-dot {
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 10px;
+      background: var(--kuro-ember);
+      border-radius: 50%;
+      box-shadow: 0 0 16px 4px var(--kuro-ember-glow), 0 0 4px 1px var(--kuro-ember-dim);
+    }
+
+    .orbit-core {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: var(--kuro-ember);
+      border-radius: 50%;
+      box-shadow: 0 0 20px 6px var(--kuro-ember-glow);
+      animation: orbit-core-pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes orbit-spin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    @keyframes orbit-core-pulse {
+      0%, 100% { opacity: 0.7; box-shadow: 0 0 20px 6px var(--kuro-ember-glow); }
+      50%       { opacity: 1;   box-shadow: 0 0 30px 10px var(--kuro-ember-glow); }
     }
 
     /* ===================================================
@@ -366,13 +639,16 @@
       display: block;
       opacity: 0.15;
       color: var(--kuro-muted);
+      filter: blur(3px);
       transition: opacity 600ms var(--ease-out-expo),
-                  color 600ms var(--ease-out-expo);
+                  color    600ms var(--ease-out-expo),
+                  filter   700ms var(--ease-out-expo);
     }
 
     .scroll-line.is-lit {
       opacity: 1;
       color: var(--kuro-text);
+      filter: blur(0px);
     }
 
     /* ===================================================
@@ -451,7 +727,7 @@
       bottom: var(--sp-8);
       right: var(--sp-8);
       font-size: var(--text-small);
-      color: var(--kuro-accent);
+      color: var(--kuro-ember);
       opacity: 0;
       transform: translate(-4px, 4px);
       transition:
@@ -463,6 +739,127 @@
       opacity: 1;
       transform: translate(0, 0);
     }
+
+    /* ===================================================
+       CARD THUMBNAILS
+    =================================================== */
+    .card-thumb {
+      position: absolute;
+      inset: 0 0 40% 0;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .card-thumb::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 50%;
+      background: linear-gradient(to bottom, transparent, var(--kuro-surface));
+      z-index: 1;
+    }
+
+    /* AURA — concentric rings, warm */
+    .showcase-card--aura .card-thumb {
+      background: radial-gradient(ellipse at 45% 55%, rgba(196,192,182,0.06) 0%, transparent 70%);
+    }
+    .showcase-card--aura .card-thumb::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 120px; height: 120px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 1px  rgba(196,192,182,0.20),
+        0 0 0 28px rgba(196,192,182,0.08),
+        0 0 0 56px rgba(196,192,182,0.05),
+        0 0 0 84px rgba(196,192,182,0.03);
+      animation: aura-breathe 6s ease-in-out infinite;
+    }
+    @keyframes aura-breathe {
+      0%,100% { transform: translate(-50%,-50%) scale(1);    opacity: 0.8; }
+      50%     { transform: translate(-50%,-50%) scale(1.06); opacity: 1;   }
+    }
+
+    /* VANTA — dark grid + iris pulse */
+    .showcase-card--vanta .card-thumb {
+      background:
+        repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(123,124,248,0.07) 39px, rgba(123,124,248,0.07) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(123,124,248,0.07) 39px, rgba(123,124,248,0.07) 40px),
+        radial-gradient(ellipse at 60% 40%, var(--kuro-iris-dim) 0%, transparent 60%);
+    }
+    .showcase-card--vanta .card-thumb::before {
+      content: '';
+      position: absolute;
+      top: 38%; left: 58%;
+      width: 6px; height: 6px;
+      background: var(--kuro-iris);
+      border-radius: 50%;
+      box-shadow: 0 0 16px 4px var(--kuro-iris-dim), 0 0 40px 12px var(--kuro-iris-glow);
+      animation: vanta-pulse 3s ease-in-out infinite;
+    }
+    @keyframes vanta-pulse {
+      0%,100% { opacity: 0.6; transform: scale(1);   }
+      50%     { opacity: 1;   transform: scale(1.4); }
+    }
+
+    /* SOLIS — rotating conic warm gradient */
+    .showcase-card--solis .card-thumb {
+      background: radial-gradient(ellipse at 40% 60%, rgba(212,180,120,0.08) 0%, transparent 65%);
+    }
+    .showcase-card--solis .card-thumb::before {
+      content: '';
+      position: absolute;
+      inset: -40%;
+      background: conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg,
+        rgba(196,192,182,0.10) 45deg,
+        rgba(212,180,120,0.12) 90deg,
+        transparent 135deg,
+        transparent 315deg,
+        rgba(196,192,182,0.08) 345deg,
+        transparent 360deg
+      );
+      animation: solis-spin 18s linear infinite;
+      border-radius: 50%;
+    }
+    @keyframes solis-spin {
+      from { transform: rotate(0deg);   }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* NØRD — typographic texture grid */
+    .showcase-card--nord .card-thumb {
+      background-color: var(--kuro-subtle);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='24'%3E%3Ctext x='4' y='18' font-family='Inter%2Csans-serif' font-size='11' font-weight='600' letter-spacing='0.08em' fill='rgba(232%2C230%2C227%2C0.07)'%3EN%C3%98RD%3C/text%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 80px 24px;
+    }
+    .showcase-card--nord .card-thumb::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg, rgba(232,230,227,0.06) 0%, transparent 50%, rgba(232,230,227,0.04) 100%),
+        radial-gradient(ellipse at 30% 30%, rgba(232,230,227,0.08) 0%, transparent 60%);
+      animation: nord-scan 8s ease-in-out infinite;
+    }
+    @keyframes nord-scan {
+      0%,100% { opacity: 0.6; transform: translateX(0);   }
+      50%     { opacity: 1;   transform: translateX(6px); }
+    }
+
+    /* ALTERNATING CARD ENTRY */
+    .showcase-card.scroll-reveal[data-col="left"]  { transform: translateX(-20px); opacity: 0; }
+    .showcase-card.scroll-reveal[data-col="right"] { transform: translateX(20px);  opacity: 0; }
+    .showcase-card.scroll-reveal.is-visible        { transform: translate(0,0);    opacity: 1; }
+
+    /* Studio columns directional origin */
+    .studio .scroll-reveal[data-col="left"]  { transform: translateX(-30px); opacity: 0; }
+    .studio .scroll-reveal[data-col="right"] { transform: translateX(30px);  opacity: 0; }
+    .studio .scroll-reveal.is-visible        { transform: translate(0,0);    opacity: 1; }
 
     /* ===================================================
        PROCESSO (4.4)
@@ -509,7 +906,7 @@
 
     .processo-number {
       font-size: var(--text-small);
-      color: var(--kuro-accent);
+      color: var(--kuro-ember);
       letter-spacing: var(--ls-small);
       font-variant-numeric: tabular-nums;
       font-weight: var(--fw-small);
@@ -566,7 +963,7 @@
 
     .magnetic-cta {
       font-size: var(--text-body);
-      color: var(--kuro-accent);
+      color: var(--kuro-ember);
       text-decoration: none;
       letter-spacing: var(--ls-body);
       display: inline-block;
@@ -603,7 +1000,7 @@
     }
 
     .footer-logo .dot {
-      color: var(--kuro-accent);
+      color: var(--kuro-ember);
     }
 
     .footer-locations {
@@ -657,6 +1054,25 @@
       .nav-cta-wrap {
         display: none;
       }
+
+      .studio-grid {
+        grid-template-columns: 1fr;
+        gap: var(--sp-10);
+      }
+
+      .studio-orbit {
+        margin: 0 auto;
+      }
+
+      .orbit-container {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+      }
+
+      .orbit-ring--3 { width: 180px; height: 180px; }
+      .orbit-ring--2 { width: 120px; height: 120px; }
+      .orbit-ring--1 { width: 60px;  height: 60px;  }
     }
 
     /* ===================================================
@@ -685,6 +1101,17 @@
       }
 
       #kuro-fog { display: none; }
+
+      .clip-reveal { clip-path: none !important; }
+      .scroll-line { filter: none !important; }
+      .hero-inner  { transform: none !important; will-change: auto !important; }
+      #grain       { display: none; }
+      .card-thumb,
+      .card-thumb::before { animation: none !important; }
+      .orbit-ring,
+      .orbit-core      { animation: none !important; }
+      .hero::before       { animation: none !important; opacity: 0.3 !important; }
+      .hero-frame-counter { display: none; }
     }
 
     /* ===================================================
@@ -718,10 +1145,10 @@
     #fog-3 { width: 400px; height: 400px; top: 40%;     right: 10%;    }
     #fog-4 { width: 350px; height: 350px; bottom: 20%;  left: 5%;      }
 
-    #fog-1 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-warm-07) 0%, transparent 70%); animation: fog-drift-1 22s ease-in-out infinite; }
+    #fog-1 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-ember-06) 0%, transparent 70%); animation: fog-drift-1 22s ease-in-out infinite; }
     #fog-2 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-warm-05) 0%, transparent 70%); animation: fog-drift-2 28s ease-in-out infinite; }
-    #fog-3 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-cool-04) 0%, transparent 70%); animation: fog-drift-3 18s ease-in-out infinite; }
-    #fog-4 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-warm-04) 0%, transparent 70%); animation: fog-drift-4 24s ease-in-out infinite; }
+    #fog-3 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-iris-03) 0%, transparent 70%); animation: fog-drift-3 18s ease-in-out infinite; }
+    #fog-4 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-ember-04) 0%, transparent 70%); animation: fog-drift-4 24s ease-in-out infinite; }
 
     @keyframes fog-drift-1 {
       0%, 100% { transform: translate(0, 0); }
@@ -744,7 +1171,7 @@
     }
 
     /* Lift all page sections above the fog */
-    .hero, .manifesto, .showcase, .processo, .cta, .footer {
+    .hero, .studio, .manifesto, .showcase, .processo, .cta, .footer {
       position: relative;
       z-index: 1;
     }
@@ -758,7 +1185,7 @@
       left: 0;
       width: 100%;
       height: 1px;
-      background: var(--kuro-accent);
+      background: var(--kuro-ember);
       transform: scaleX(0);
       transform-origin: left;
       z-index: 101;
@@ -784,7 +1211,7 @@
     #cursor-dot {
       width: 6px;
       height: 6px;
-      background: var(--kuro-accent);
+      background: var(--kuro-ember);
       transition: opacity 300ms ease;
     }
 
@@ -809,9 +1236,24 @@
       #cursor-dot, #cursor-ring { display: none; }
       body { cursor: auto; }
     }
+
+    /* GRAIN TEXTURE */
+    #grain {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 128px 128px;
+    }
   </style>
 </head>
 <body>
+
+<!-- GRAIN TEXTURE -->
+<div id="grain" aria-hidden="true"></div>
 
 <!-- NÉVOA FOG LAYER -->
 <div id="kuro-fog" aria-hidden="true">
@@ -833,7 +1275,15 @@
   ================================================ -->
   <nav class="nav" id="nav" aria-label="Primary navigation">
     <div class="container nav-inner">
-      <a href="#" class="nav-logo" aria-label="KURO Studio home">KURO<span class="dot" aria-hidden="true">·</span></a>
+      <a href="#" class="nav-logo" aria-label="KURO Studio home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="kuro-mark">
+          <line x1="5.75" y1="3"  x2="5.75" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="10"   y1="12" x2="20"   y2="3"  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="10"   y1="12" x2="20"   y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="5.75" y1="12" x2="10"   y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="21" cy="21" r="1.5" fill="var(--kuro-ember)"/>
+        </svg>KURO<span class="dot" aria-hidden="true">·</span>
+      </a>
       <div class="nav-cta-wrap">
         <a href="mailto:hello@kuro.studio" class="nav-cta">hello@kuro.studio</a>
       </div>
@@ -844,6 +1294,7 @@
        HERO (4.1)
   ================================================ -->
   <section class="hero" aria-labelledby="hero-heading">
+    <span class="hero-frame-counter" id="hero-frame-counter" aria-hidden="true">▶ 001 · 60fps</span>
     <div class="hero-inner">
       <h1 class="hero-headline" id="hero-heading">
         <span class="reveal reveal-d0">We</span>
@@ -855,11 +1306,68 @@
       </h1>
       <div class="hero-separator" aria-hidden="true"></div>
       <p class="hero-tagline">Motion is identity.</p>
+      <div class="hero-cta-wrap">
+        <a href="mailto:hello@kuro.studio" class="hero-cta">Start a project ↗</a>
+      </div>
     </div>
   </section>
 
   <!-- ================================================
-       MANIFESTO (4.2)
+       STUDIO (4.2)
+  ================================================ -->
+  <section class="studio" aria-labelledby="studio-heading">
+    <div class="studio-inner">
+      <p class="section-label clip-reveal">Studio</p>
+      <div class="studio-grid">
+
+        <div class="studio-orbit scroll-reveal" data-col="left" aria-hidden="true">
+          <div class="orbit-container">
+            <div class="orbit-ring orbit-ring--3"></div>
+            <div class="orbit-ring orbit-ring--2"></div>
+            <div class="orbit-ring orbit-ring--1">
+              <span class="orbit-dot"></span>
+            </div>
+            <div class="orbit-core"></div>
+          </div>
+        </div>
+
+        <div class="studio-text scroll-reveal" data-col="right">
+          <h2 class="studio-headline" id="studio-heading">
+            KURO is a motion design studio<br>crafting kinetic identities for<br>ambitious brands.
+          </h2>
+          <p class="studio-body">
+            We don't add motion.<br>We make motion the message.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="studio-stats">
+        <div class="studio-stat scroll-reveal" data-delay="0">
+          <div class="stat-number">
+            <span class="stat-value" data-target="40">0</span><span class="stat-suffix">+</span>
+          </div>
+          <span class="stat-label">brands</span>
+        </div>
+        <div class="studio-stat scroll-reveal" data-delay="100">
+          <div class="stat-number">
+            <span class="stat-value" data-target="6">0</span><span class="stat-suffix">yr</span>
+          </div>
+          <span class="stat-label">studio</span>
+        </div>
+        <div class="studio-stat scroll-reveal" data-delay="200">
+          <div class="stat-number">
+            <span class="stat-value" data-target="3">0</span><span class="stat-suffix"></span>
+          </div>
+          <span class="stat-label">continents</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================
+       MANIFESTO (4.3)
   ================================================ -->
   <section class="manifesto" aria-label="Manifesto">
     <div class="manifesto-inner">
@@ -874,14 +1382,15 @@
   </section>
 
   <!-- ================================================
-       SHOWCASE (4.3)
+       SHOWCASE (4.4)
   ================================================ -->
   <section class="showcase" aria-labelledby="showcase-label">
     <div class="showcase-inner">
-      <p class="showcase-label scroll-reveal" id="showcase-label">Selected work.</p>
+      <p class="showcase-label clip-reveal" id="showcase-label">Selected work.</p>
       <div class="showcase-grid">
 
-        <article class="showcase-card scroll-reveal" data-delay="0" aria-label="AURA project">
+        <article class="showcase-card showcase-card--aura scroll-reveal" data-delay="0" data-col="left" aria-label="AURA project">
+          <div class="card-thumb" aria-hidden="true"></div>
           <div>
             <div class="showcase-card-name">AURA</div>
             <div class="showcase-card-meta">Brand Identity &amp; Motion System · 2024</div>
@@ -889,7 +1398,8 @@
           <span class="showcase-card-arrow" aria-hidden="true">→</span>
         </article>
 
-        <article class="showcase-card scroll-reveal" data-delay="80" aria-label="VANTA project">
+        <article class="showcase-card showcase-card--vanta scroll-reveal" data-delay="80" data-col="right" aria-label="VANTA project">
+          <div class="card-thumb" aria-hidden="true"></div>
           <div>
             <div class="showcase-card-name">VANTA</div>
             <div class="showcase-card-meta">Product Launch Campaign · 2024</div>
@@ -897,7 +1407,8 @@
           <span class="showcase-card-arrow" aria-hidden="true">→</span>
         </article>
 
-        <article class="showcase-card scroll-reveal" data-delay="160" aria-label="SOLIS project">
+        <article class="showcase-card showcase-card--solis scroll-reveal" data-delay="160" data-col="left" aria-label="SOLIS project">
+          <div class="card-thumb" aria-hidden="true"></div>
           <div>
             <div class="showcase-card-name">SOLIS</div>
             <div class="showcase-card-meta">E-commerce Experience · 2023</div>
@@ -905,7 +1416,8 @@
           <span class="showcase-card-arrow" aria-hidden="true">→</span>
         </article>
 
-        <article class="showcase-card scroll-reveal" data-delay="240" aria-label="NØRD project">
+        <article class="showcase-card showcase-card--nord scroll-reveal" data-delay="240" data-col="right" aria-label="NØRD project">
+          <div class="card-thumb" aria-hidden="true"></div>
           <div>
             <div class="showcase-card-name">NØRD</div>
             <div class="showcase-card-meta">Digital Editorial · 2023</div>
@@ -918,7 +1430,7 @@
   </section>
 
   <!-- ================================================
-       PROCESSO (4.4)
+       PROCESSO (4.5)
   ================================================ -->
   <section class="processo" aria-label="Process">
     <div class="processo-inner" id="processo-inner">
@@ -950,7 +1462,7 @@
   </section>
 
   <!-- ================================================
-       CTA (4.5)
+       CTA (4.6)
   ================================================ -->
   <section class="cta" aria-labelledby="cta-heading">
     <div class="cta-inner">
@@ -963,12 +1475,20 @@
   </section>
 
   <!-- ================================================
-       FOOTER (4.6)
+       FOOTER (4.7)
   ================================================ -->
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-top">
-        <a href="#" class="footer-logo" aria-label="KURO Studio">KURO<span class="dot" aria-hidden="true">·</span></a>
+        <a href="#" class="footer-logo" aria-label="KURO Studio">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="kuro-mark">
+            <line x1="5.75" y1="3"  x2="5.75" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="10"   y1="12" x2="20"   y2="3"  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="10"   y1="12" x2="20"   y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="5.75" y1="12" x2="10"   y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="21" cy="21" r="1.5" fill="var(--kuro-ember)"/>
+          </svg>KURO<span class="dot" aria-hidden="true">·</span>
+        </a>
         <span class="footer-locations">Tokyo / São Paulo / Remote</span>
       </div>
       <p class="footer-copyright">© 2026 KURO Studio</p>
@@ -981,6 +1501,20 @@
     ================================================ */
     const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+
+    /* ================================================
+       FRAME COUNTER
+    ================================================ */
+    (function initFrameCounter() {
+      if (REDUCED_MOTION) return;
+      const el = document.getElementById('hero-frame-counter');
+      if (!el) return;
+      let frame = 1;
+      setInterval(() => {
+        frame = (frame % 999) + 1;
+        el.textContent = '▶ ' + String(frame).padStart(3, '0') + ' · 60fps';
+      }, 16);
+    })();
 
     /* ================================================
        FOG — cursor parallax + scroll fade
@@ -1019,6 +1553,7 @@
     ================================================ */
     const nav             = document.getElementById('nav');
     const scrollProgressBar = document.getElementById('scroll-progress');
+    const heroInner       = document.querySelector('.hero-inner');
 
     window.addEventListener('scroll', () => {
       // Nav blur
@@ -1028,79 +1563,175 @@
       const scrollable = document.body.scrollHeight - window.innerHeight;
       const progress   = scrollable > 0 ? window.scrollY / scrollable : 0;
       scrollProgressBar.style.transform = `scaleX(${Math.min(progress, 1)})`;
+
+      // Hero parallax
+      if (heroInner && !REDUCED_MOTION) {
+        heroInner.style.transform = `translateY(${window.scrollY * 0.3}px)`;
+      }
     }, { passive: true });
 
 
     /* ================================================
-       SCROLL REVEAL — IntersectionObserver (P2)
-       Supports data-delay attribute for stagger
+       BIDIRECTIONAL SCROLL SYSTEM
     ================================================ */
-    const scrollRevealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
+    (function initBidirectionalScroll() {
+      let lastScrollY = window.scrollY;
+      let scrollDir = 'down';
 
-        const delay = parseInt(entry.target.dataset.delay || '0', 10);
-        entry.target.style.transitionDelay = delay + 'ms';
-        entry.target.classList.add('is-visible');
+      // Track scroll direction
+      window.addEventListener('scroll', () => {
+        const current = window.scrollY;
+        scrollDir = current >= lastScrollY ? 'down' : 'up';
+        lastScrollY = current;
+      }, { passive: true });
 
-        // Clear the delay after the animation so hover transitions are instant
-        setTimeout(() => {
-          entry.target.style.transitionDelay = '';
-        }, delay + 1000);
+      // Elements with entrance/retract animations
+      const revealEls = document.querySelectorAll('.scroll-reveal');
 
-        scrollRevealObserver.unobserve(entry.target);
-      });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll('.scroll-reveal').forEach(el => {
-      scrollRevealObserver.observe(el);
-    });
-
-
-    /* ================================================
-       MANIFESTO LINES — progressive scroll lighting (P2)
-    ================================================ */
-    const manifestoLines = document.querySelectorAll('.scroll-line');
-
-    manifestoLines.forEach((line, index) => {
-      // Each line has a progressively tighter rootMargin,
-      // so they "light up" sequentially as the user scrolls down
-      const topOffset  = 10 + index * 8;
-      const btmOffset  = 25;
-
-      const lineObserver = new IntersectionObserver((entries) => {
+      const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
+          const el = entry.target;
+          const delay = parseInt(el.dataset.delay || '0');
+
           if (entry.isIntersecting) {
-            line.classList.add('is-lit');
+            // Always reveal when entering viewport
+            setTimeout(() => el.classList.add('is-visible'), delay);
+          } else {
+            // Retract only when scrolling back up past the element
+            if (scrollDir === 'up') {
+              el.classList.remove('is-visible');
+            }
           }
         });
       }, {
-        threshold: 0.5,
-        rootMargin: `-${topOffset}% 0px -${btmOffset}% 0px`
+        threshold: 0.12,
+        rootMargin: '0px 0px -5% 0px'
       });
 
-      lineObserver.observe(line);
-    });
+      revealEls.forEach(el => revealObserver.observe(el));
 
+      // Clip-path reveals (section labels)
+      const clipEls = document.querySelectorAll('.clip-reveal');
 
-    /* ================================================
-       PROCESSO TIMELINE — grows scaleX as section enters
-    ================================================ */
-    const processoTimeline = document.getElementById('processo-timeline');
-    const processoInner    = document.getElementById('processo-inner');
-
-    if (processoInner && processoTimeline) {
-      const timelineObserver = new IntersectionObserver((entries) => {
+      const clipObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            processoTimeline.classList.add('is-visible');
-            timelineObserver.unobserve(entry.target);
+            entry.target.classList.add('is-revealed');
+          } else if (scrollDir === 'up') {
+            entry.target.classList.remove('is-revealed');
           }
         });
       }, { threshold: 0.3 });
 
-      timelineObserver.observe(processoInner);
-    }
+      clipEls.forEach(el => clipObserver.observe(el));
+
+    })();
+
+    /* ================================================
+       STAT COUNTERS — BIDIRECTIONAL
+    ================================================ */
+    (function initStatCounters() {
+      const stats = document.querySelectorAll('.stat-value[data-target]');
+      if (!stats.length) return;
+
+      let lastScrollY = window.scrollY;
+      let scrollDir = 'down';
+      window.addEventListener('scroll', () => {
+        const current = window.scrollY;
+        scrollDir = current >= lastScrollY ? 'down' : 'up';
+        lastScrollY = current;
+      }, { passive: true });
+
+      function animateCount(el, from, to, duration) {
+        const startTime = performance.now();
+        const range = to - from;
+
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(from + range * eased);
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target, 10);
+
+          if (entry.isIntersecting) {
+            animateCount(el, 0, target, 1200);
+          } else if (scrollDir === 'up') {
+            animateCount(el, target, 0, 500);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      stats.forEach(stat => observer.observe(stat));
+    })();
+
+
+    /* ================================================
+       MANIFESTO LINES — BIDIRECTIONAL
+    ================================================ */
+    (function initScrollLines() {
+      let lastScrollY = window.scrollY;
+      let scrollDir = 'down';
+      window.addEventListener('scroll', () => {
+        const current = window.scrollY;
+        scrollDir = current >= lastScrollY ? 'down' : 'up';
+        lastScrollY = current;
+      }, { passive: true });
+
+      const lines = Array.from(document.querySelectorAll('.scroll-line'));
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-lit');
+          } else if (scrollDir === 'up') {
+            // Retract lines in reverse order (bottom up)
+            const idx = lines.indexOf(entry.target);
+            lines.forEach((line, i) => {
+              if (i >= idx) line.classList.remove('is-lit');
+            });
+          }
+        });
+      }, { threshold: 0.6 });
+
+      lines.forEach(line => observer.observe(line));
+    })();
+
+
+    /* ================================================
+       PROCESSO TIMELINE — BIDIRECTIONAL
+    ================================================ */
+    (function initProcessoTimeline() {
+      const timeline = document.getElementById('processo-timeline');
+      if (!timeline) return;
+
+      let lastScrollY = window.scrollY;
+      let scrollDir = 'down';
+      window.addEventListener('scroll', () => {
+        const current = window.scrollY;
+        scrollDir = current >= lastScrollY ? 'down' : 'up';
+        lastScrollY = current;
+      }, { passive: true });
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            timeline.classList.add('is-visible');
+          } else if (scrollDir === 'up') {
+            timeline.classList.remove('is-visible');
+          }
+        });
+      }, { threshold: 0.3 });
+
+      observer.observe(timeline.parentElement);
+    })();
 
 
     /* ================================================
