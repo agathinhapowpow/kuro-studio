@@ -197,71 +197,24 @@
     /* ===================================================
        HERO LINE 2 — EMBER SWIPE REVEAL
     =================================================== */
-    /* sem overflow:hidden — evita cortar descenders e a caixa visível.
-       A barra começa com opacity 0 para não aparecer fora dos limites. */
-    .hero-line-2-wrap {
-      display: block;
-      position: relative;
-      margin-top: 0.05em;
-    }
-
     .hero-line-2 {
       display: block;
       background: linear-gradient(110deg, #FF4D1C 0%, #FF7A45 40%, #FFB347 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      clip-path: inset(0 100% 0 0);
-      /* começa após line 1 terminar: 500ms delay + 900ms duração = 1400ms + 100ms respiro */
-      animation: hero-swipe-reveal 0.55s cubic-bezier(0.76, 0, 0.24, 1) 1550ms forwards;
-    }
-
-    @keyframes hero-swipe-reveal {
-      from { clip-path: inset(0 100% 0 0); }
-      to   { clip-path: inset(0 0%   0 0); }
-    }
-
-    .hero-swipe-bar {
-      position: absolute;
-      top: 0; bottom: 0; left: 0;
-      width: 44px;
-      pointer-events: none;
-      background: linear-gradient(90deg,
-        rgba(255,77,28,0) 0%,
-        rgba(255,100,40,0.9) 38%,
-        #FF4D1C 58%,
-        rgba(255,77,28,0.25) 100%
-      );
-      filter: blur(3px);
-      /* mesma janela: fade in rápido no início, varre, dissolve no final */
-      animation: hero-bar-sweep 0.85s cubic-bezier(0.76, 0, 0.24, 1) 1510ms forwards;
-    }
-
-    @keyframes hero-bar-sweep {
-      0%   { transform: translateX(-48px); opacity: 0; }
-      12%  { opacity: 1; }
-      70%  { opacity: 1; }
-      100% { transform: translateX(120vw); opacity: 0; filter: blur(14px); }
-    }
-
-    .hero-swipe-glow {
-      position: absolute;
-      inset: -6px;
-      background: radial-gradient(ellipse 80% 140% at 50% 50%, rgba(255,77,28,0.14) 0%, transparent 70%);
-      pointer-events: none;
       opacity: 0;
-      /* aparece quando a barra termina: 1510 + 850 ≈ 2360ms */
-      animation: hero-afterglow 1s ease-out 2.36s forwards;
+      animation: hero-line2-emerge 0.75s var(--ease-out-expo) 1500ms forwards;
     }
 
-    @keyframes hero-afterglow {
-      0%   { opacity: 1; }
-      100% { opacity: 0; }
+    @keyframes hero-line2-emerge {
+      0%   { opacity: 0; filter: blur(10px) brightness(4); transform: translateY(8px); }
+      45%  { opacity: 1; filter: blur(1px)  brightness(1.6); transform: translateY(2px); }
+      100% { opacity: 1; filter: blur(0)    brightness(1);   transform: translateY(0); }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .hero-line-2 { clip-path: none !important; animation: none !important; }
-      .hero-swipe-bar, .hero-swipe-glow { display: none !important; }
+      .hero-line-2 { animation: kuro-reveal var(--duration-reveal) var(--ease-out-expo) 1500ms forwards; }
     }
 
     /* ===================================================
@@ -1293,11 +1246,7 @@
         <span class="reveal reveal-d0">We</span>
         <span class="reveal reveal-d1">don't</span>
         <span class="reveal reveal-d2">decorate.</span>
-        <span class="hero-line-2-wrap">
-          <span class="hero-line-2">We choreograph.</span>
-          <span class="hero-swipe-bar" aria-hidden="true"></span>
-          <span class="hero-swipe-glow" aria-hidden="true"></span>
-        </span>
+        <span class="hero-line-2">We choreograph.</span>
       </h1>
       <div class="hero-separator" aria-hidden="true"></div>
       <p class="hero-tagline">Motion is identity.</p>
