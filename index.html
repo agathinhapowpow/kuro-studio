@@ -193,8 +193,71 @@
     .reveal-d0 { animation-delay: 300ms; }
     .reveal-d1 { animation-delay: 400ms; }
     .reveal-d2 { animation-delay: 500ms; }
-    .reveal-d3 { animation-delay: 600ms; }
-    .reveal-d4 { animation-delay: 700ms; }
+
+    /* ===================================================
+       HERO LINE 2 — EMBER SWIPE REVEAL
+    =================================================== */
+    .hero-line-2-wrap {
+      display: block;
+      position: relative;
+      overflow: hidden;
+      margin-top: 0.05em;
+    }
+
+    .hero-line-2 {
+      display: block;
+      background: linear-gradient(110deg, #FF4D1C 0%, #FF7A45 40%, #FFB347 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      clip-path: inset(0 100% 0 0);
+      animation: hero-swipe-reveal 0.55s cubic-bezier(0.76, 0, 0.24, 1) 700ms forwards;
+    }
+
+    @keyframes hero-swipe-reveal {
+      from { clip-path: inset(0 100% 0 0); }
+      to   { clip-path: inset(0 0%   0 0); }
+    }
+
+    .hero-swipe-bar {
+      position: absolute;
+      top: 0; bottom: 0; left: 0;
+      width: 44px;
+      pointer-events: none;
+      background: linear-gradient(90deg,
+        rgba(255,77,28,0) 0%,
+        rgba(255,100,40,0.9) 38%,
+        #FF4D1C 58%,
+        rgba(255,77,28,0.25) 100%
+      );
+      filter: blur(3px);
+      animation: hero-bar-sweep 0.85s cubic-bezier(0.76, 0, 0.24, 1) 660ms forwards;
+    }
+
+    @keyframes hero-bar-sweep {
+      0%  { transform: translateX(-48px); opacity: 1; }
+      70% { opacity: 1; }
+      100% { transform: translateX(120vw); opacity: 0; filter: blur(14px); }
+    }
+
+    .hero-swipe-glow {
+      position: absolute;
+      inset: -6px;
+      background: radial-gradient(ellipse 80% 140% at 50% 50%, rgba(255,77,28,0.14) 0%, transparent 70%);
+      pointer-events: none;
+      opacity: 0;
+      animation: hero-afterglow 1s ease-out 1.22s forwards;
+    }
+
+    @keyframes hero-afterglow {
+      0%   { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-line-2 { clip-path: none !important; animation: none !important; }
+      .hero-swipe-bar, .hero-swipe-glow { display: none !important; }
+    }
 
     /* ===================================================
        SCROLL REVEAL (P2 — Scroll as narrative)
@@ -759,96 +822,22 @@
       z-index: 1;
     }
 
-    /* AURA — concentric rings, warm */
-    .showcase-card--aura .card-thumb {
-      background: radial-gradient(ellipse at 45% 55%, rgba(196,192,182,0.06) 0%, transparent 70%);
+    /* CARD PHOTOS */
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0.6;
+      filter: saturate(0.65) brightness(0.6);
+      transition: opacity 0.5s var(--ease-out-expo),
+                  transform 0.6s var(--ease-out-expo),
+                  filter 0.5s var(--ease-out-expo);
     }
-    .showcase-card--aura .card-thumb::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      width: 120px; height: 120px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      box-shadow:
-        0 0 0 1px  rgba(196,192,182,0.20),
-        0 0 0 28px rgba(196,192,182,0.08),
-        0 0 0 56px rgba(196,192,182,0.05),
-        0 0 0 84px rgba(196,192,182,0.03);
-      animation: aura-breathe 6s ease-in-out infinite;
-    }
-    @keyframes aura-breathe {
-      0%,100% { transform: translate(-50%,-50%) scale(1);    opacity: 0.8; }
-      50%     { transform: translate(-50%,-50%) scale(1.06); opacity: 1;   }
-    }
-
-    /* VANTA — dark grid + iris pulse */
-    .showcase-card--vanta .card-thumb {
-      background:
-        repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(123,124,248,0.07) 39px, rgba(123,124,248,0.07) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(123,124,248,0.07) 39px, rgba(123,124,248,0.07) 40px),
-        radial-gradient(ellipse at 60% 40%, var(--kuro-iris-dim) 0%, transparent 60%);
-    }
-    .showcase-card--vanta .card-thumb::before {
-      content: '';
-      position: absolute;
-      top: 38%; left: 58%;
-      width: 6px; height: 6px;
-      background: var(--kuro-iris);
-      border-radius: 50%;
-      box-shadow: 0 0 16px 4px var(--kuro-iris-dim), 0 0 40px 12px var(--kuro-iris-glow);
-      animation: vanta-pulse 3s ease-in-out infinite;
-    }
-    @keyframes vanta-pulse {
-      0%,100% { opacity: 0.6; transform: scale(1);   }
-      50%     { opacity: 1;   transform: scale(1.4); }
-    }
-
-    /* SOLIS — rotating conic warm gradient */
-    .showcase-card--solis .card-thumb {
-      background: radial-gradient(ellipse at 40% 60%, rgba(212,180,120,0.08) 0%, transparent 65%);
-    }
-    .showcase-card--solis .card-thumb::before {
-      content: '';
-      position: absolute;
-      inset: -40%;
-      background: conic-gradient(
-        from 0deg at 50% 50%,
-        transparent 0deg,
-        rgba(196,192,182,0.10) 45deg,
-        rgba(212,180,120,0.12) 90deg,
-        transparent 135deg,
-        transparent 315deg,
-        rgba(196,192,182,0.08) 345deg,
-        transparent 360deg
-      );
-      animation: solis-spin 18s linear infinite;
-      border-radius: 50%;
-    }
-    @keyframes solis-spin {
-      from { transform: rotate(0deg);   }
-      to   { transform: rotate(360deg); }
-    }
-
-    /* NØRD — typographic texture grid */
-    .showcase-card--nord .card-thumb {
-      background-color: var(--kuro-subtle);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='24'%3E%3Ctext x='4' y='18' font-family='Inter%2Csans-serif' font-size='11' font-weight='600' letter-spacing='0.08em' fill='rgba(232%2C230%2C227%2C0.07)'%3EN%C3%98RD%3C/text%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 80px 24px;
-    }
-    .showcase-card--nord .card-thumb::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(135deg, rgba(232,230,227,0.06) 0%, transparent 50%, rgba(232,230,227,0.04) 100%),
-        radial-gradient(ellipse at 30% 30%, rgba(232,230,227,0.08) 0%, transparent 60%);
-      animation: nord-scan 8s ease-in-out infinite;
-    }
-    @keyframes nord-scan {
-      0%,100% { opacity: 0.6; transform: translateX(0);   }
-      50%     { opacity: 1;   transform: translateX(6px); }
+    .showcase-card:hover .card-thumb img {
+      opacity: 0.82;
+      filter: saturate(0.85) brightness(0.75);
+      transform: scale(1.04);
     }
 
     /* ALTERNATING CARD ENTRY */
@@ -1106,8 +1095,7 @@
       .scroll-line { filter: none !important; }
       .hero-inner  { transform: none !important; will-change: auto !important; }
       #grain       { display: none; }
-      .card-thumb,
-      .card-thumb::before { animation: none !important; }
+      .card-thumb img { transition: none !important; }
       .orbit-ring,
       .orbit-core      { animation: none !important; }
       .hero::before       { animation: none !important; opacity: 0.3 !important; }
@@ -1300,9 +1288,11 @@
         <span class="reveal reveal-d0">We</span>
         <span class="reveal reveal-d1">don't</span>
         <span class="reveal reveal-d2">decorate.</span>
-        <br>
-        <span class="reveal reveal-d3">We</span>
-        <span class="reveal reveal-d4">choreograph.</span>
+        <span class="hero-line-2-wrap">
+          <span class="hero-line-2">We choreograph.</span>
+          <span class="hero-swipe-bar" aria-hidden="true"></span>
+          <span class="hero-swipe-glow" aria-hidden="true"></span>
+        </span>
       </h1>
       <div class="hero-separator" aria-hidden="true"></div>
       <p class="hero-tagline">Motion is identity.</p>
@@ -1390,7 +1380,7 @@
       <div class="showcase-grid">
 
         <article class="showcase-card showcase-card--aura scroll-reveal" data-delay="0" data-col="left" aria-label="AURA project">
-          <div class="card-thumb" aria-hidden="true"></div>
+          <div class="card-thumb" aria-hidden="true"><img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=800&q=80" alt="" loading="lazy"></div>
           <div>
             <div class="showcase-card-name">AURA</div>
             <div class="showcase-card-meta">Brand Identity &amp; Motion System · 2024</div>
@@ -1399,7 +1389,7 @@
         </article>
 
         <article class="showcase-card showcase-card--vanta scroll-reveal" data-delay="80" data-col="right" aria-label="VANTA project">
-          <div class="card-thumb" aria-hidden="true"></div>
+          <div class="card-thumb" aria-hidden="true"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80" alt="" loading="lazy"></div>
           <div>
             <div class="showcase-card-name">VANTA</div>
             <div class="showcase-card-meta">Product Launch Campaign · 2024</div>
@@ -1408,7 +1398,7 @@
         </article>
 
         <article class="showcase-card showcase-card--solis scroll-reveal" data-delay="160" data-col="left" aria-label="SOLIS project">
-          <div class="card-thumb" aria-hidden="true"></div>
+          <div class="card-thumb" aria-hidden="true"><img src="https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=800&q=80" alt="" loading="lazy"></div>
           <div>
             <div class="showcase-card-name">SOLIS</div>
             <div class="showcase-card-meta">E-commerce Experience · 2023</div>
@@ -1417,7 +1407,7 @@
         </article>
 
         <article class="showcase-card showcase-card--nord scroll-reveal" data-delay="240" data-col="right" aria-label="NØRD project">
-          <div class="card-thumb" aria-hidden="true"></div>
+          <div class="card-thumb" aria-hidden="true"><img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80" alt="" loading="lazy"></div>
           <div>
             <div class="showcase-card-name">NØRD</div>
             <div class="showcase-card-meta">Digital Editorial · 2023</div>
@@ -1803,44 +1793,6 @@
       });
     })();
 
-    /* ================================================
-       TEXT SCRAMBLE — hero headline words
-    ================================================ */
-    (function initScramble() {
-      if (REDUCED_MOTION) return;
-
-      const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZアイウエオカキクケコ01';
-      const FRAMES  = 21; // ~350ms at 60fps
-
-      function scramble(span) {
-        const finalChars = span.textContent.split('');
-        const resolveAt  = finalChars.map(() => 1 + Math.floor(Math.random() * FRAMES));
-        let frame = 0;
-
-        function tick() {
-          if (frame > FRAMES) {
-            span.textContent = finalChars.join('');
-            return;
-          }
-          span.textContent = finalChars.map((ch, i) => {
-            if (ch === ' ' || ch === '\u00B7') return ch;
-            if (frame >= resolveAt[i]) return ch;
-            return CHARSET[Math.floor(Math.random() * CHARSET.length)];
-          }).join('');
-          frame++;
-          requestAnimationFrame(tick);
-        }
-
-        requestAnimationFrame(tick);
-      }
-
-      // Delays match the CSS animation-delay on each .reveal-dN class (in ms)
-      const WORD_DELAYS = [300, 400, 500, 600, 700];
-
-      document.querySelectorAll('.hero-headline .reveal').forEach((word, i) => {
-        setTimeout(() => scramble(word), WORD_DELAYS[i]);
-      });
-    })();
 
     /* ================================================
        CARD 3D PERSPECTIVE HOVER
