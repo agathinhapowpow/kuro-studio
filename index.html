@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KURO· — Motion is identity.</title>
+  <meta name="description" content="KURO is a motion design studio. We build brand identities that move — campaigns, digital experiences, and visual systems where motion is the message.">
+  <meta property="og:type"        content="website">
+  <meta property="og:title"       content="KURO· — Motion is identity.">
+  <meta property="og:description" content="KURO is a motion design studio. We build brand identities that move — campaigns, digital experiences, and visual systems where motion is the message.">
+  <meta property="og:image"       content="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&q=80">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="KURO· — Motion is identity.">
+  <meta name="twitter:description" content="KURO is a motion design studio. We build brand identities that move.">
+  <meta name="twitter:image"       content="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&q=80">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,7 +43,7 @@
 
       /* Display */
       --text-display: clamp(48px, 6.5vw, 88px);
-      --ls-display:   0.06em;
+      --ls-display:   -0.03em;
       --lh-display:   1.08;
       --fw-display:   700;
 
@@ -154,6 +163,71 @@
       -moz-osx-font-smoothing: grayscale;
       font-feature-settings: 'cv02','cv03','cv04','cv11';
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Grain noise overlay — full page, fixed, pointer-events:none */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.13;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ===================================================
+       BG BLOBS — warm-grey radial drift
+    =================================================== */
+    #kuro-bg-blobs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .kuro-blob {
+      position: absolute;
+      border-radius: 50%;
+      mix-blend-mode: screen;
+    }
+    .kuro-blob-1 {
+      width: 90vw; height: 90vw;
+      top: -25%; left: -15%;
+      background: radial-gradient(circle, rgba(196,192,182,0.045) 0%, transparent 65%);
+      animation: kblob1 95s linear infinite;
+    }
+    .kuro-blob-2 {
+      width: 70vw; height: 70vw;
+      bottom: -20%; right: -10%;
+      background: radial-gradient(circle, rgba(196,192,182,0.035) 0%, transparent 65%);
+      animation: kblob2 78s linear infinite;
+    }
+    .kuro-blob-3 {
+      width: 55vw; height: 55vw;
+      top: 30%; left: 35%;
+      background: radial-gradient(circle, rgba(196,192,182,0.028) 0%, transparent 65%);
+      animation: kblob3 118s linear infinite;
+    }
+    @keyframes kblob1 {
+      0%   { transform: translate(0,0)    scale(1);    }
+      33%  { transform: translate(4%,3%)  scale(1.04); }
+      66%  { transform: translate(2%,6%)  scale(0.97); }
+      100% { transform: translate(0,0)    scale(1);    }
+    }
+    @keyframes kblob2 {
+      0%   { transform: translate(0,0)    scale(1);    }
+      33%  { transform: translate(-5%,4%) scale(1.06); }
+      66%  { transform: translate(-2%,-3%)scale(0.96); }
+      100% { transform: translate(0,0)    scale(1);    }
+    }
+    @keyframes kblob3 {
+      0%   { transform: translate(0,0)     scale(1);    }
+      50%  { transform: translate(-6%,-4%) scale(1.08); }
+      100% { transform: translate(0,0)     scale(1);    }
     }
 
     /* ===================================================
@@ -170,10 +244,6 @@
       }
     }
 
-    @keyframes pulse-bloom {
-      0%, 100% { opacity: 0.3; transform: scale(0.85); }
-      50%       { opacity: 0.8; transform: scale(1.15); }
-    }
 
     @keyframes line-expand {
       from { transform: scaleX(0); }
@@ -208,10 +278,35 @@
       animation: hero-line2-emerge 0.75s var(--ease-out-expo) 1100ms forwards;
     }
 
+    @keyframes bar-breathe {
+      0%, 100% { opacity: 0.45; }
+      50%       { opacity: 1.0; }
+    }
+
+    /* ── Intro: bar fades in clean ── */
+    @keyframes glow-bar-intro {
+      from { opacity: 0; }
+      to   { opacity: 0.45; }
+    }
+
+    /* ── Intro: ambient bloom fades in clean ── */
+    @keyframes glow-ambient-intro {
+      from { opacity: 0; }
+      to   { opacity: 0.75; }
+    }
+
     @keyframes hero-line2-emerge {
       0%   { opacity: 0; filter: blur(10px) brightness(4); transform: translateY(8px); }
       45%  { opacity: 1; filter: blur(1px)  brightness(1.6); transform: translateY(2px); }
       100% { opacity: 1; filter: blur(0)    brightness(1);   transform: translateY(0); }
+    }
+
+    /* Ember gradient — shared emphasis treatment across sections */
+    .text-ember {
+      background: linear-gradient(110deg, #FF4D1C 0%, #FF7A45 40%, #FFB347 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -288,17 +383,30 @@
     }
 
     .nav-logo {
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
       text-transform: uppercase;
-      color: var(--kuro-text);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.55);
       text-decoration: none;
       line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      transition: -webkit-text-stroke-color 300ms ease;
     }
 
-    .nav-logo .dot {
-      color: var(--kuro-ember);
+    .nav-logo:hover {
+      -webkit-text-stroke-color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* K-mark SVG uses currentColor which inherits transparent — override */
+    .nav-logo .kuro-mark line {
+      stroke: rgba(255, 255, 255, 0.55);
+      transition: stroke 300ms ease;
+    }
+    .nav-logo:hover .kuro-mark line {
+      stroke: rgba(255, 255, 255, 0.85);
     }
 
     /* K MARK */
@@ -358,7 +466,7 @@
       align-items: center;
       justify-content: center;
       padding: var(--section-y) var(--container-px);
-      background-color: var(--kuro-void);
+      background-color: transparent;
       background-image: radial-gradient(circle, rgba(255,77,28,0.07) 1px, transparent 1px);
       background-size: 32px 32px;
       text-align: center;
@@ -366,12 +474,43 @@
       overflow: hidden;
     }
 
+
+    /* ── Linear light bar — ambient glow (tube light) ── */
     .hero::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 55% 55% at 50% 50%, rgba(255,77,28,0.09) 0%, transparent 70%);
-      animation: pulse-bloom 5s ease-in-out infinite;
+      top: -1px;
+      left: 0;
+      right: 0;
+      height: 380px;
+      background: linear-gradient(180deg,
+        rgba(255, 77, 28, 0.75) 0px,
+        rgba(255, 77, 28, 0.50) 1px,
+        rgba(255, 77, 28, 0.22) 5px,
+        rgba(255, 77, 28, 0.10) 20px,
+        rgba(255, 77, 28, 0.05) 80px,
+        rgba(255, 77, 28, 0.02) 200px,
+        transparent 100%
+      );
+      animation: glow-bar-intro 2.2s ease-out forwards, bar-breathe 5s ease-in-out infinite 2.2s;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Ambient bloom — soft light cloud below the bar ── */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 85%;
+      background: linear-gradient(180deg,
+        rgba(255, 77, 28, 0.14) 0%,
+        rgba(255, 77, 28, 0.06) 50%,
+        transparent 100%
+      );
+      animation: glow-bar-intro 2.2s ease-out forwards, bar-breathe 5s ease-in-out infinite 2.2s;
       pointer-events: none;
       z-index: 0;
     }
@@ -403,6 +542,33 @@
     /* Reset margin-left after a line break */
     .hero-headline br + .reveal {
       margin-left: 0;
+    }
+
+    /* Hero announcement pill */
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--kuro-ember-border);
+      background: var(--kuro-ember-dim);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--kuro-ember);
+      margin-bottom: var(--sp-8);
+      opacity: 0;
+      animation: kuro-reveal var(--duration-reveal) var(--ease-out-expo) 200ms forwards;
+    }
+
+    .hero-pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--kuro-ember);
+      flex-shrink: 0;
+      animation: orbit-core-pulse 2.5s ease-in-out infinite;
     }
 
     /* Hero separator line */
@@ -449,31 +615,133 @@
     }
 
     .hero-cta {
-      font-size: var(--text-body);
-      color: var(--kuro-ember);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--kuro-void);
+      background: var(--kuro-ember);
       text-decoration: none;
       letter-spacing: 0.04em;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      padding: 12px 28px;
+      border-radius: 999px;
       position: relative;
-      padding-bottom: 2px;
+      overflow: hidden;
+      transition: background 300ms var(--ease-out-expo),
+                  transform  300ms var(--ease-out-expo),
+                  box-shadow 300ms var(--ease-out-expo);
     }
 
-    .hero-cta::after {
+    .hero-cta::before {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: var(--kuro-ember);
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform 350ms var(--ease-out-expo);
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      animation: cta-shimmer 2.8s ease-in-out 1.8s infinite;
     }
 
-    .hero-cta:hover::after {
-      transform: scaleX(1);
-      transform-origin: left;
+    @keyframes cta-shimmer {
+      0%   { left: -100%; }
+      50%  { left: 120%;  }
+      100% { left: 120%;  }
+    }
+
+    .hero-cta:hover {
+      background: #ff6a3a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(255, 77, 28, 0.4);
+    }
+
+    .hero-cta:active {
+      transform: translateY(0);
+    }
+
+    /* Hero client strip */
+    .hero-clients {
+      margin-top: var(--sp-16);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-4);
+      opacity: 0;
+      animation: kuro-reveal var(--duration-slow) var(--ease-out-expo) 1400ms forwards;
+    }
+
+    .hero-clients-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--kuro-muted);
+      opacity: 0.45;
+    }
+
+    .hero-clients-row {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-10);
+    }
+
+    .hero-client-mark {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--kuro-muted);
+      opacity: 0.28;
+      transition: opacity 300ms var(--ease-out-expo);
+      user-select: none;
+    }
+
+    .hero-client-mark:hover {
+      opacity: 0.55;
+    }
+
+    @media (max-width: 768px) {
+      .hero-clients-row { gap: var(--sp-6); }
+      .hero-client-mark { font-size: 11px; }
+    }
+
+    /* Hero scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: var(--sp-10);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-2);
+      opacity: 0;
+      animation: kuro-reveal var(--duration-normal) var(--ease-out-expo) 1600ms forwards;
+      pointer-events: none;
+      transition: opacity 400ms ease;
+    }
+
+    .hero-scroll.is-hidden {
+      opacity: 0 !important;
+    }
+
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(180deg, var(--kuro-ember), transparent);
+      animation: scroll-drop 1.6s var(--ease-out-expo) 2s infinite;
+      transform-origin: top;
+    }
+
+    @keyframes scroll-drop {
+      0%   { transform: scaleY(0); opacity: 0; transform-origin: top; }
+      40%  { transform: scaleY(1); opacity: 1; transform-origin: top; }
+      60%  { transform: scaleY(1); opacity: 1; transform-origin: bottom; }
+      100% { transform: scaleY(0); opacity: 0; transform-origin: bottom; }
+    }
+
+    @media (max-width: 768px) {
+      .hero-scroll { display: none; }
     }
 
     /* ===================================================
@@ -481,7 +749,7 @@
     =================================================== */
     .studio {
       padding: var(--section-y) var(--container-px);
-      background: var(--kuro-void);
+      background: transparent;
       position: relative;
       z-index: 1;
     }
@@ -514,6 +782,7 @@
       letter-spacing: var(--ls-h2);
       line-height: var(--lh-h2);
       color: var(--kuro-text);
+      text-wrap: balance;
       margin-bottom: var(--sp-6);
     }
 
@@ -539,9 +808,9 @@
     }
 
     .stat-number {
-      font-size: clamp(32px, 4vw, 52px);
+      font-size: clamp(52px, 6vw, 88px);
       font-weight: 700;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
       line-height: 1;
       color: var(--kuro-text);
     }
@@ -585,21 +854,23 @@
       width: 80px;
       height: 80px;
       animation: orbit-spin 8s linear infinite;
-      border-color: var(--kuro-ember-border);
+      border-color: rgba(255, 77, 28, 0.40);
+      box-shadow: 0 0 12px rgba(255, 77, 28, 0.12);
     }
 
     .orbit-ring--2 {
       width: 160px;
       height: 160px;
       animation: orbit-spin 16s linear infinite reverse;
-      border-color: rgba(255, 77, 28, 0.12);
+      border-color: rgba(255, 77, 28, 0.22);
     }
 
     .orbit-ring--3 {
       width: 240px;
       height: 240px;
       animation: orbit-spin 28s linear infinite;
-      border-color: rgba(255, 77, 28, 0.07);
+      border-color: rgba(255, 77, 28, 0.12);
+      box-shadow: 0 0 40px rgba(255, 77, 28, 0.06) inset;
     }
 
     .orbit-dot {
@@ -639,7 +910,7 @@
     =================================================== */
     .manifesto {
       padding: var(--section-y) var(--container-px);
-      background: var(--kuro-void);
+      background: transparent;
     }
 
     .manifesto-inner {
@@ -648,13 +919,29 @@
       text-align: center;
     }
 
+    .manifesto-inner::before,
+    .manifesto-inner::after {
+      content: '';
+      display: block;
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--kuro-ember), transparent);
+      margin: 0 auto var(--sp-12);
+      opacity: 0.5;
+    }
+
+    .manifesto-inner::after {
+      margin: var(--sp-12) auto 0;
+    }
+
     .manifesto-text {
       font-size: var(--text-h2);
       font-weight: var(--fw-h2);
       letter-spacing: var(--ls-h2);
       line-height: var(--lh-h2);
       color: var(--kuro-text);
-      text-align: center;
+      text-align: justify;
+      text-align-last: left;
     }
 
     /* Each line starts dim, lights up on scroll */
@@ -675,135 +962,216 @@
     }
 
     /* ===================================================
-       SHOWCASE (4.3)
+       ZOOM PARALLAX — AURA (4.3)
+       BG layers zoom radially + fade; center image
+       translates to left rail; concept text slides in.
     =================================================== */
-    .showcase {
-      padding: var(--section-y) var(--container-px);
-      background: var(--kuro-void);
+    .zoom-parallax {
+      background: transparent;
+      position: relative;
     }
 
-    .showcase-inner {
-      max-width: var(--container-max);
-      margin: 0 auto;
+    .zoom-parallax-track {
+      height: 320vh;
+      position: relative;
     }
 
-    .showcase-label {
+    .zoom-parallax-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .zp-section-label {
+      position: absolute;
+      top: clamp(24px, 4vw, 40px);
+      left: var(--container-px);
+      z-index: 20;
       font-size: var(--text-small);
       letter-spacing: var(--ls-small);
       color: var(--kuro-muted);
       text-transform: uppercase;
       line-height: var(--lh-small);
-      margin-bottom: var(--sp-12);
-    }
-
-    .showcase-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--sp-4);
-      perspective: 1000px;
-    }
-
-    .showcase-card {
-      aspect-ratio: 16 / 10;
-      background: var(--kuro-surface);
-      border: 1px solid var(--kuro-border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      padding: var(--sp-8);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      transform-style: preserve-3d;
-      will-change: transform;
-      transition:
-        transform var(--duration-fast) var(--ease-out-expo),
-        background var(--duration-fast) var(--ease-out-expo),
-        border-color var(--duration-fast) var(--ease-out-expo);
-    }
-
-    .showcase-card:hover {
-      background: var(--kuro-subtle);
-      border-color: var(--kuro-border-hover);
-      transform: translateY(-2px);
-    }
-
-    .showcase-card-name {
-      font-size: var(--text-h3);
-      font-weight: var(--fw-h3);
-      color: var(--kuro-text);
-      letter-spacing: var(--ls-h3);
-      line-height: var(--lh-h3);
-    }
-
-    .showcase-card-meta {
-      font-size: var(--text-small);
-      color: var(--kuro-muted);
-      letter-spacing: var(--ls-small);
-      line-height: var(--lh-small);
-      margin-top: var(--sp-2);
-    }
-
-    .showcase-card-arrow {
-      position: absolute;
-      bottom: var(--sp-8);
-      right: var(--sp-8);
-      font-size: var(--text-small);
-      color: var(--kuro-ember);
-      opacity: 0;
-      transform: translate(-4px, 4px);
-      transition:
-        opacity var(--duration-fast) var(--ease-out-expo),
-        transform var(--duration-fast) var(--ease-out-expo);
-    }
-
-    .showcase-card:hover .showcase-card-arrow {
-      opacity: 1;
-      transform: translate(0, 0);
-    }
-
-    /* ===================================================
-       CARD THUMBNAILS
-    =================================================== */
-    .card-thumb {
-      position: absolute;
-      inset: 0 0 40% 0;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-      overflow: hidden;
       pointer-events: none;
-    }
-    .card-thumb::after {
-      content: '';
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 50%;
-      background: linear-gradient(to bottom, transparent, var(--kuro-surface));
-      z-index: 1;
+      will-change: opacity;
     }
 
-    /* CARD PHOTOS */
-    .card-thumb img {
+    /* BG layers — full-viewport flex-center; .zp-img-wrap translate stays static */
+    .zp-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform, opacity;
+      transform-origin: center center;
+    }
+
+    .zp-img-wrap {
+      flex-shrink: 0;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+    }
+
+    .zp-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      opacity: 0.6;
-      filter: saturate(0.65) brightness(0.6);
-      transition: opacity 0.5s var(--ease-out-expo),
-                  transform 0.6s var(--ease-out-expo),
-                  filter 0.5s var(--ease-out-expo);
-    }
-    .showcase-card:hover .card-thumb img {
-      opacity: 0.82;
-      filter: saturate(0.85) brightness(0.75);
-      transform: scale(1.04);
     }
 
-    /* ALTERNATING CARD ENTRY */
-    .showcase-card.scroll-reveal[data-col="left"]  { transform: translateX(-20px); opacity: 0; }
-    .showcase-card.scroll-reveal[data-col="right"] { transform: translateX(20px);  opacity: 0; }
-    .showcase-card.scroll-reveal.is-visible        { transform: translate(0,0);    opacity: 1; }
+    /* Center AURA image — geometry driven entirely by JS */
+    #zp-center-wrap {
+      position: absolute;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      z-index: 10;
+      will-change: left, top, width, height;
+    }
+
+    #zp-center-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* AURA concept text — slides in from right as image settles */
+    #zp-concept-text {
+      position: absolute;
+      left: 52%;
+      width: 42%;
+      top: 50%;
+      transform: translateY(-50%) translateX(28px);
+      z-index: 11;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ===================================================
+       CONCEPTS LIST — VANTA / SOLIS / NØRD (4.4)
+    =================================================== */
+    .concepts {
+      padding: var(--section-y) var(--container-px);
+      background: transparent;
+    }
+
+    .concepts-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .concepts-header {
+      margin-bottom: var(--sp-16);
+    }
+
+    .concepts-header p {
+      font-size: var(--text-small);
+      letter-spacing: var(--ls-small);
+      color: var(--kuro-muted);
+      text-transform: uppercase;
+    }
+
+    .concept-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .concept-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-12);
+      align-items: center;
+      padding: var(--sp-16) 0;
+      border-top: 1px solid var(--kuro-border);
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 900ms var(--ease-out-expo),
+                  transform 900ms var(--ease-out-expo);
+    }
+
+    .concept-item.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* AURA lands image-left in parallax, so first card (VANTA, odd) opens image-right */
+    .concept-item:nth-child(odd)  .concept-img  { order: 2; }
+    .concept-item:nth-child(odd)  .concept-body { order: 1; }
+
+    .concept-img {
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+    }
+
+    .concept-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(0.65) brightness(0.68);
+      transition: filter 600ms var(--ease-out-expo),
+                  transform 600ms var(--ease-out-expo);
+    }
+
+    .concept-item:hover .concept-img img {
+      filter: saturate(0.88) brightness(0.84);
+      transform: scale(1.03);
+    }
+
+    .concept-num {
+      display: block;
+      font-size: var(--text-small);
+      letter-spacing: 0.1em;
+      color: var(--kuro-muted);
+      margin-bottom: var(--sp-4);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .concept-name {
+      font-size: clamp(36px, 5.5vw, 72px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 0.88;
+      color: var(--kuro-text);
+      margin-bottom: var(--sp-6);
+    }
+
+    .concept-rule {
+      width: 32px;
+      height: 1px;
+      background: var(--kuro-border-hover);
+      margin-bottom: var(--sp-6);
+    }
+
+    .concept-summary {
+      font-size: var(--text-body);
+      line-height: var(--lh-body);
+      color: var(--kuro-muted);
+      max-width: 380px;
+    }
+
+    .concept-meta {
+      display: block;
+      margin-top: var(--sp-6);
+      font-size: var(--text-small);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--kuro-muted);
+      opacity: 0.45;
+    }
+
+    @media (max-width: 768px) {
+      .concept-item {
+        grid-template-columns: 1fr;
+      }
+      .concept-item:nth-child(odd)  .concept-img  { order: 0; }
+      .concept-item:nth-child(odd)  .concept-body { order: 0; }
+    }
 
     /* Studio columns directional origin */
     .studio .scroll-reveal[data-col="left"]  { transform: translateX(-30px); opacity: 0; }
@@ -815,7 +1183,7 @@
     =================================================== */
     .processo {
       padding: var(--section-y) var(--container-px);
-      background: var(--kuro-void);
+      background: transparent;
     }
 
     .processo-inner {
@@ -849,10 +1217,6 @@
       z-index: 1;
     }
 
-    .processo-step {
-      padding-top: var(--sp-8);
-    }
-
     .processo-number {
       font-size: var(--text-small);
       color: var(--kuro-ember);
@@ -872,14 +1236,142 @@
     }
 
     /* ===================================================
+       FLIP CARD
+    =================================================== */
+    .processo-step {
+      padding-top: var(--sp-8);
+      perspective: 1000px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      transform-style: preserve-3d;
+      transition: transform 750ms cubic-bezier(0.6, 0, 0.4, 1);
+      cursor: pointer;
+    }
+
+    /* flip rotation driven by JS — see initFlipCards() */
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    /* FRONT */
+    .flip-card-front {
+      background: var(--kuro-subtle);
+    }
+
+    .flip-card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.55;
+      display: block;
+      transition: opacity 400ms;
+    }
+
+    .processo-step:hover .flip-card-front img {
+      opacity: 0.45;
+    }
+
+    .flip-card-front-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: var(--sp-6);
+      background: linear-gradient(to top, rgba(10,10,11,0.88) 0%, rgba(10,10,11,0.2) 60%, transparent 100%);
+    }
+
+    .flip-card-front-content .processo-number {
+      font-size: var(--text-small);
+      color: var(--kuro-ember);
+      letter-spacing: var(--ls-small);
+      font-weight: var(--fw-small);
+    }
+
+    .flip-card-front-content .processo-title {
+      font-size: var(--text-h3);
+      font-weight: var(--fw-h3);
+      color: var(--kuro-text);
+      letter-spacing: var(--ls-h3);
+      line-height: var(--lh-h3);
+      margin-top: var(--sp-2);
+    }
+
+    /* BACK */
+    .flip-card-back {
+      transform: rotateY(180deg);
+      background: var(--kuro-surface);
+      border: 1px solid var(--kuro-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--sp-6);
+    }
+
+    .flip-card-back .processo-number {
+      font-size: var(--text-small);
+      color: var(--kuro-ember);
+      letter-spacing: var(--ls-small);
+      font-weight: var(--fw-small);
+    }
+
+    .flip-card-back .processo-title {
+      font-size: var(--text-h3);
+      font-weight: var(--fw-h3);
+      color: var(--kuro-text);
+      letter-spacing: var(--ls-h3);
+      line-height: var(--lh-h3);
+      margin-top: var(--sp-2);
+      margin-bottom: var(--sp-4);
+    }
+
+    .flip-card-desc {
+      font-size: var(--text-small);
+      color: var(--kuro-muted);
+      line-height: 1.6;
+      letter-spacing: var(--ls-body);
+    }
+
+    /* ===================================================
        CTA (4.5)
     =================================================== */
     .cta {
       padding: var(--sp-32) var(--container-px);
-      background: var(--kuro-void);
+      background: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bg-word {
+      position: absolute;
+      bottom: -0.18em;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(100px, 20vw, 280px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.18);
+      line-height: 1;
+      pointer-events: none;
+      white-space: nowrap;
+      user-select: none;
+      z-index: 0;
     }
 
     .cta-inner {
+      position: relative;
+      z-index: 1;
       max-width: var(--container-narrow);
       margin: 0 auto;
       text-align: center;
@@ -968,6 +1460,273 @@
     }
 
     /* ===================================================
+       SHOWREEL (C)
+    =================================================== */
+    .showreel {
+      padding: var(--section-y) var(--container-px);
+    }
+
+    .showreel-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .showreel-stage {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--kuro-subtle);
+      background-image:
+        radial-gradient(ellipse 55% 50% at 50% 50%, rgba(255, 77, 28, 0.13) 0%, transparent 65%),
+        radial-gradient(ellipse 80% 80% at 50% 50%, rgba(255, 77, 28, 0.04) 0%, transparent 100%);
+      border: 1px solid rgba(255, 77, 28, 0.14);
+      cursor: pointer;
+      transition: border-color 400ms var(--ease-out-expo),
+                  box-shadow   400ms var(--ease-out-expo);
+    }
+
+    .showreel-stage:hover {
+      border-color: rgba(255, 77, 28, 0.28);
+      box-shadow: 0 0 60px rgba(255, 77, 28, 0.10), inset 0 0 60px rgba(255, 77, 28, 0.04);
+    }
+
+    .showreel-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-4);
+    }
+
+    .showreel-play-btn {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 77, 28, 0.35);
+      background: rgba(255, 77, 28, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--kuro-ember);
+      box-shadow: 0 0 32px rgba(255, 77, 28, 0.18), inset 0 0 16px rgba(255, 77, 28, 0.06);
+      transition: border-color 300ms var(--ease-out-expo),
+                  transform   400ms var(--ease-out-expo),
+                  background  300ms var(--ease-out-expo),
+                  box-shadow  300ms var(--ease-out-expo);
+    }
+
+    .showreel-stage:hover .showreel-play-btn {
+      border-color: var(--kuro-ember);
+      background: rgba(255, 77, 28, 0.16);
+      transform: scale(1.12);
+      box-shadow: 0 0 48px rgba(255, 77, 28, 0.30), inset 0 0 20px rgba(255, 77, 28, 0.10);
+    }
+
+    .showreel-play-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--kuro-muted);
+      text-transform: uppercase;
+      transition: color 300ms;
+    }
+
+    .showreel-stage:hover .showreel-play-label {
+      color: var(--kuro-text);
+    }
+
+    /* Lightbox */
+    .showreel-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(10, 10, 11, 0.96);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 400ms, visibility 400ms;
+    }
+
+    .showreel-lightbox.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .showreel-lightbox-wrap {
+      position: relative;
+      width: min(90vw, 1080px);
+    }
+
+    .showreel-lightbox-wrap video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: block;
+      border-radius: var(--radius-md);
+      background: #000;
+    }
+
+    .showreel-lightbox-close {
+      position: absolute;
+      top: -36px;
+      right: 0;
+      background: none;
+      border: none;
+      color: var(--kuro-muted);
+      font-size: var(--text-small);
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      padding: var(--sp-2);
+      text-transform: uppercase;
+      transition: color 200ms;
+    }
+
+    .showreel-lightbox-close:hover {
+      color: var(--kuro-text);
+    }
+
+    /* ===================================================
+       TESTIMONIALS (D)
+    =================================================== */
+    @property --shine-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+
+    @keyframes shine-rotate {
+      to { --shine-angle: 360deg; }
+    }
+
+    .testimonials {
+      padding: var(--section-y) var(--container-px);
+    }
+
+    .testimonials-inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-6);
+      margin-top: var(--sp-12);
+    }
+
+    .testimonial-card {
+      position: relative;
+      overflow: hidden;
+      background:
+        rgba(20, 20, 22, 0.55) padding-box,
+        conic-gradient(
+          from var(--shine-angle),
+          rgba(255, 255, 255, 0.08) 0deg,
+          rgba(255, 255, 255, 0.08) 310deg,
+          rgba(255, 77,  28, 0.85) 348deg,
+          rgba(255, 255, 255, 0.08) 360deg
+        ) border-box;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid transparent;
+      border-radius: var(--radius-lg);
+      padding: var(--sp-8);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-6);
+      will-change: transform;
+      transition: box-shadow 300ms var(--ease-out-expo),
+                  transform  150ms ease;
+      animation: shine-rotate 4s linear infinite paused;
+    }
+
+    .testimonial-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at var(--mx, 50%) var(--my, 50%),
+        rgba(255, 255, 255, 0.08) 0%,
+        transparent 65%
+      );
+      opacity: 0;
+      transition: opacity 200ms ease;
+      pointer-events: none;
+    }
+
+    .testimonial-card:hover::after {
+      opacity: 1;
+    }
+
+    .testimonial-card:hover {
+      box-shadow: 0 0 40px rgba(255, 77, 28, 0.08);
+      animation-play-state: running;
+    }
+
+    .testimonial-mark {
+      font-size: 28px;
+      line-height: 1;
+      color: var(--kuro-ember);
+      opacity: 0.7;
+    }
+
+    .testimonial-quote {
+      font-size: 15px;
+      color: var(--kuro-text);
+      line-height: 1.65;
+      letter-spacing: var(--ls-body);
+      flex: 1;
+    }
+
+    .testimonial-author {
+      border-top: 1px solid var(--kuro-border);
+      padding-top: var(--sp-4);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .testimonial-name {
+      font-size: var(--text-small);
+      font-weight: 500;
+      color: var(--kuro-text);
+      letter-spacing: var(--ls-small);
+    }
+
+    .testimonial-role {
+      font-size: var(--text-small);
+      color: var(--kuro-muted);
+      letter-spacing: var(--ls-small);
+    }
+
+    /* ===================================================
+       FOOTER SOCIAL (E)
+    =================================================== */
+    .footer-social {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+    }
+
+    .footer-social-link {
+      color: var(--kuro-muted);
+      transition: color 200ms;
+      line-height: 0;
+    }
+
+    .footer-social-link:hover {
+      color: var(--kuro-text);
+    }
+
+    .footer-social-link svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ===================================================
        RESPONSIVIDADE (5)
     =================================================== */
     @media (max-width: 768px) {
@@ -977,14 +1736,6 @@
 
       .manifesto-text {
         font-size: clamp(20px, 5vw, 28px);
-      }
-
-      .showcase-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .showcase-card {
-        aspect-ratio: 16 / 9;
       }
 
       .processo-grid {
@@ -1022,6 +1773,11 @@
       .orbit-ring--3 { width: 180px; height: 180px; }
       .orbit-ring--2 { width: 120px; height: 120px; }
       .orbit-ring--1 { width: 60px;  height: 60px;  }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: var(--sp-4);
+      }
     }
 
     /* ===================================================
@@ -1049,79 +1805,19 @@
         transform: none !important;
       }
 
-      #kuro-fog { display: none; }
-
       .clip-reveal { clip-path: none !important; }
       .scroll-line { filter: none !important; }
       .hero-inner  { transform: none !important; will-change: auto !important; }
-      #grain       { display: none; }
       .card-thumb img { transition: none !important; }
+      #ambient-top { animation: none !important; opacity: 0.75 !important; }
       .orbit-ring,
       .orbit-core      { animation: none !important; }
-      .hero::before       { animation: none !important; opacity: 0.3 !important; }
       .hero-frame-counter { display: none; }
     }
 
-    /* ===================================================
-       NÉVOA FOG LAYER
-    =================================================== */
-    #kuro-fog {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    /* Outer: receives JS cursor-parallax transform only */
-    .fog-blob {
-      position: absolute;
-      will-change: transform;
-      transition: transform 1.2s var(--ease-out-quart);
-    }
-
-    /* Inner: CSS drift animation + visual gradient */
-    .fog-blob-inner {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      filter: blur(80px);
-    }
-
-    #fog-1 { width: 600px; height: 600px; top: -100px;  left: -150px;  }
-    #fog-2 { width: 500px; height: 500px; bottom: -80px; right: -100px; }
-    #fog-3 { width: 400px; height: 400px; top: 40%;     right: 10%;    }
-    #fog-4 { width: 350px; height: 350px; bottom: 20%;  left: 5%;      }
-
-    #fog-1 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-ember-06) 0%, transparent 70%); animation: fog-drift-1 22s ease-in-out infinite; }
-    #fog-2 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-warm-05) 0%, transparent 70%); animation: fog-drift-2 28s ease-in-out infinite; }
-    #fog-3 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-iris-03) 0%, transparent 70%); animation: fog-drift-3 18s ease-in-out infinite; }
-    #fog-4 .fog-blob-inner { background: radial-gradient(circle, var(--kuro-fog-ember-04) 0%, transparent 70%); animation: fog-drift-4 24s ease-in-out infinite; }
-
-    @keyframes fog-drift-1 {
-      0%, 100% { transform: translate(0, 0); }
-      33%      { transform: translate(60px, -40px); }
-      66%      { transform: translate(-30px, 50px); }
-    }
-    @keyframes fog-drift-2 {
-      0%, 100% { transform: translate(0, 0); }
-      33%      { transform: translate(-50px, 40px); }
-      66%      { transform: translate(40px, -30px); }
-    }
-    @keyframes fog-drift-3 {
-      0%, 100% { transform: translate(0, 0); }
-      50%      { transform: translate(-40px, 30px); }
-    }
-    @keyframes fog-drift-4 {
-      0%, 100% { transform: translate(0, 0); }
-      33%      { transform: translate(30px, 40px); }
-      66%      { transform: translate(-20px, -30px); }
-    }
-
-    /* Lift all page sections above the fog */
-    .hero, .studio, .manifesto, .showcase, .processo, .cta, .footer {
+    /* Sections sit above background glows */
+    .hero, .studio, .manifesto, .zoom-parallax, .concepts, .showreel, .processo, .testimonials, .cta, .footer {
       position: relative;
-      z-index: 1;
     }
 
     /* ===================================================
@@ -1185,30 +1881,92 @@
       body { cursor: auto; }
     }
 
-    /* GRAIN TEXTURE */
-    #grain {
+    /* ===================================================
+       AMBIENT GRADIENT BACKGROUND
+    =================================================== */
+    #ambient-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 110vh;
+      pointer-events: none;
+      z-index: 0;
+      background: linear-gradient(180deg,
+        rgba(255, 77, 28, 0.38) 0%,
+        rgba(255, 77, 28, 0.18) 40%,
+        rgba(255, 77, 28, 0.06) 60%,
+        transparent 72%
+      );
+      animation: glow-ambient-intro 2.8s ease-out forwards, ambient-breathe 7s ease-in-out infinite 2.8s;
+    }
+
+    #ambient-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 110vh;
+      pointer-events: none;
+      z-index: 0;
+      background: linear-gradient(0deg,
+        rgba(255, 77, 28, 0.38) 0%,
+        rgba(255, 77, 28, 0.18) 40%,
+        rgba(255, 77, 28, 0.06) 60%,
+        transparent 72%
+      );
+      animation: ambient-breathe 7s ease-in-out infinite;
+    }
+
+    @keyframes ambient-breathe {
+      0%, 100% { opacity: 0.75; }
+      50%       { opacity: 1;    }
+    }
+
+    /* ===================================================
+       CURSOR GLOW
+    =================================================== */
+    #cursor-glow {
       position: fixed;
       inset: 0;
-      z-index: 50;
       pointer-events: none;
-      opacity: 0.035;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 128px 128px;
+      z-index: 10;
+    }
+
+    /* ===================================================
+       SCROLLBAR
+    =================================================== */
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 77, 28, 0.32) #0A0A0B;
+    }
+    ::-webkit-scrollbar {
+      width: 3px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A0A0B;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 77, 28, 0.32);
+      border-radius: 2px;
+      transition: background 300ms;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 77, 28, 0.65);
     }
   </style>
 </head>
 <body>
 
-<!-- GRAIN TEXTURE -->
-<div id="grain" aria-hidden="true"></div>
+<!-- AMBIENT GRADIENT BACKGROUND -->
+<div id="ambient-top" aria-hidden="true"></div>
+<div id="ambient-bottom" aria-hidden="true"></div>
 
-<!-- NÉVOA FOG LAYER -->
-<div id="kuro-fog" aria-hidden="true">
-  <div class="fog-blob" id="fog-1"><div class="fog-blob-inner"></div></div>
-  <div class="fog-blob" id="fog-2"><div class="fog-blob-inner"></div></div>
-  <div class="fog-blob" id="fog-3"><div class="fog-blob-inner"></div></div>
-  <div class="fog-blob" id="fog-4"><div class="fog-blob-inner"></div></div>
+<!-- BG BLOBS — warm-grey radial drift (layer 2 of 3) -->
+<div id="kuro-bg-blobs" aria-hidden="true">
+  <div class="kuro-blob kuro-blob-1"></div>
+  <div class="kuro-blob kuro-blob-2"></div>
+  <div class="kuro-blob kuro-blob-3"></div>
 </div>
 
 <!-- SCROLL PROGRESS -->
@@ -1217,6 +1975,7 @@
 <!-- CUSTOM CURSOR -->
 <div id="cursor-dot"  aria-hidden="true"></div>
 <div id="cursor-ring" aria-hidden="true"></div>
+<div id="cursor-glow" aria-hidden="true"></div>
 
   <!-- ================================================
        NAV
@@ -1230,7 +1989,7 @@
           <line x1="10"   y1="12" x2="20"   y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           <line x1="5.75" y1="12" x2="10"   y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
           <circle cx="21" cy="21" r="1.5" fill="var(--kuro-ember)"/>
-        </svg>KURO<span class="dot" aria-hidden="true">·</span>
+        </svg>KURO
       </a>
       <div class="nav-cta-wrap">
         <a href="mailto:hello@kuro.studio" class="nav-cta">hello@kuro.studio</a>
@@ -1244,7 +2003,11 @@
   <section class="hero" aria-labelledby="hero-heading">
     <span class="hero-frame-counter" id="hero-frame-counter" aria-hidden="true">▶ 001 · 60fps</span>
     <div class="hero-inner">
-      <h1 class="hero-headline" id="hero-heading">
+      <div class="hero-pill" aria-label="Studio">
+        <span class="hero-pill-dot" aria-hidden="true"></span>
+        Motion Studio · 2026
+      </div>
+      <h1 class="hero-headline" id="hero-heading" data-glow>
         <span class="reveal reveal-d0">We</span>
         <span class="reveal reveal-d1">don't</span>
         <span class="reveal reveal-d2">decorate.</span>
@@ -1255,6 +2018,19 @@
       <div class="hero-cta-wrap">
         <a href="mailto:hello@kuro.studio" class="hero-cta">Start a project ↗</a>
       </div>
+      <div class="hero-clients" aria-hidden="true">
+        <span class="hero-clients-label">Selected clients</span>
+        <div class="hero-clients-row">
+          <span class="hero-client-mark">AXON</span>
+          <span class="hero-client-mark">PRIM</span>
+          <span class="hero-client-mark">VELA</span>
+          <span class="hero-client-mark">KIRA</span>
+          <span class="hero-client-mark">LUMIS</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <div class="hero-scroll-line"></div>
     </div>
   </section>
 
@@ -1279,7 +2055,7 @@
 
         <div class="studio-text scroll-reveal" data-col="right">
           <h2 class="studio-headline" id="studio-heading">
-            KURO is a motion design studio<br>crafting kinetic identities for<br>ambitious brands.
+            KURO is a motion design studio crafting <span class="text-ember">kinetic identities</span> for ambitious brands.
           </h2>
           <p class="studio-body">
             We don't add motion.<br>We make motion the message.
@@ -1320,7 +2096,7 @@
       <p class="manifesto-text">
         <span class="line scroll-line">Every transition tells a story.</span>
         <span class="line scroll-line">Every pause is intentional.</span>
-        <span class="line scroll-line">We believe motion isn't ornament —</span>
+        <span class="line scroll-line">We believe <span class="text-ember">motion isn't ornament</span> —</span>
         <span class="line scroll-line">it's the language your brand speaks</span>
         <span class="line scroll-line">when no one is reading.</span>
       </p>
@@ -1328,47 +2104,110 @@
   </section>
 
   <!-- ================================================
-       SHOWCASE (4.4)
+       ZOOM PARALLAX — AURA (4.4)
+       BG layers zoom radially outward + fade.
+       Center AURA image translates to left rail.
+       AURA concept text slides in alongside.
   ================================================ -->
-  <section class="showcase" aria-labelledby="showcase-label">
-    <div class="showcase-inner">
-      <p class="showcase-label clip-reveal" id="showcase-label">Selected work.</p>
-      <div class="showcase-grid">
+  <section class="zoom-parallax" aria-label="Selected work">
+    <div class="zoom-parallax-track" id="zp-track">
+      <div class="zoom-parallax-sticky">
 
-        <article class="showcase-card showcase-card--aura scroll-reveal" data-delay="0" data-col="left" aria-label="AURA project">
-          <div class="card-thumb" aria-hidden="true"><img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=800&q=80" alt="" loading="lazy"></div>
-          <div>
-            <div class="showcase-card-name">AURA</div>
-            <div class="showcase-card-meta">Brand Identity &amp; Motion System · 2024</div>
+        <p class="zp-section-label" id="zp-label" aria-hidden="true">Selected work.</p>
+
+        <!-- BG layers — zoom radially + fade (scale on layer, translate on .zp-img-wrap stays static) -->
+
+        <!-- NØRD · top-left · scale 9 -->
+        <div class="zp-layer" data-scale="9">
+          <div class="zp-img-wrap" style="width:20vw;height:45vh;transform:translate(-25vw,-10vh)">
+            <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=2000&q=85" alt="" loading="lazy" style="filter:saturate(0.45) brightness(0.5)">
           </div>
-          <span class="showcase-card-arrow" aria-hidden="true">→</span>
+        </div>
+
+        <!-- SOLIS · bottom-left · scale 8 -->
+        <div class="zp-layer" data-scale="8">
+          <div class="zp-img-wrap" style="width:25vw;height:25vh;transform:translate(-4vw,27vh)">
+            <img src="https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=2000&q=85" alt="" loading="lazy" style="filter:saturate(0.65) brightness(0.5)">
+          </div>
+        </div>
+
+        <!-- VANTA · top-right · scale 5 -->
+        <div class="zp-layer" data-scale="5">
+          <div class="zp-img-wrap" style="width:35vw;height:30vh;transform:translate(5vw,-30vh)">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=2000&q=85" alt="" loading="lazy" style="filter:saturate(0.4) brightness(0.48)">
+          </div>
+        </div>
+
+        <!-- AURA-side · right · scale 6 -->
+        <div class="zp-layer" data-scale="6">
+          <div class="zp-img-wrap" style="width:18vw;height:35vh;transform:translate(22vw,6vh)">
+            <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=2000&q=85" alt="" loading="lazy" style="filter:saturate(0.35) sepia(0.2) brightness(0.45);object-position:70% 30%">
+          </div>
+        </div>
+
+        <!-- AURA center — translates to left rail on scroll -->
+        <div id="zp-center-wrap" data-glow>
+          <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=3200&q=90" alt="AURA — Brand Identity & Motion System" loading="eager">
+        </div>
+
+        <!-- AURA concept text — slides in from right as image settles -->
+        <div id="zp-concept-text" data-glow>
+          <span class="concept-num">01 / 04</span>
+          <h2 class="concept-name">AURA</h2>
+          <div class="concept-rule"></div>
+          <p class="concept-summary">Identity systems that breathe. A luxury skincare brand reborn — every microinteraction sculpted to feel like ritual.</p>
+          <span class="concept-meta">Brand Identity &amp; Motion System · 2024</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       CONCEPTS — VANTA / SOLIS / NØRD (4.5)
+       AURA is revealed in the parallax section above.
+  ================================================ -->
+  <section class="concepts" aria-label="Selected work">
+    <div class="concepts-inner">
+      <div class="concept-list">
+
+        <article class="concept-item" data-glow data-delay="0" aria-label="VANTA project">
+          <div class="concept-img">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&q=90" alt="VANTA — hardware product campaign visual" loading="lazy">
+          </div>
+          <div class="concept-body">
+            <span class="concept-num">02 / 04</span>
+            <h2 class="concept-name">VANTA</h2>
+            <div class="concept-rule"></div>
+            <p class="concept-summary">Darkness as a design language. A hardware launch built around the void — surgical motion, zero noise.</p>
+            <span class="concept-meta">Product Launch Campaign · 2024</span>
+          </div>
         </article>
 
-        <article class="showcase-card showcase-card--vanta scroll-reveal" data-delay="80" data-col="right" aria-label="VANTA project">
-          <div class="card-thumb" aria-hidden="true"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80" alt="" loading="lazy"></div>
-          <div>
-            <div class="showcase-card-name">VANTA</div>
-            <div class="showcase-card-meta">Product Launch Campaign · 2024</div>
+        <article class="concept-item" data-glow data-delay="80" aria-label="SOLIS project">
+          <div class="concept-img">
+            <img src="https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=1200&q=90" alt="SOLIS — sun-drenched e-commerce platform visual" loading="lazy">
           </div>
-          <span class="showcase-card-arrow" aria-hidden="true">→</span>
+          <div class="concept-body">
+            <span class="concept-num">03 / 04</span>
+            <h2 class="concept-name">SOLIS</h2>
+            <div class="concept-rule"></div>
+            <p class="concept-summary">Commerce choreographed. A sun-drenched platform where every scroll triggers warmth and every product earns its entrance.</p>
+            <span class="concept-meta">E-commerce Experience · 2023</span>
+          </div>
         </article>
 
-        <article class="showcase-card showcase-card--solis scroll-reveal" data-delay="160" data-col="left" aria-label="SOLIS project">
-          <div class="card-thumb" aria-hidden="true"><img src="https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=800&q=80" alt="" loading="lazy"></div>
-          <div>
-            <div class="showcase-card-name">SOLIS</div>
-            <div class="showcase-card-meta">E-commerce Experience · 2023</div>
+        <article class="concept-item" data-glow data-delay="160" aria-label="NØRD project">
+          <div class="concept-img">
+            <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&q=90" alt="NØRD — editorial platform with kinetic typography" loading="lazy">
           </div>
-          <span class="showcase-card-arrow" aria-hidden="true">→</span>
-        </article>
-
-        <article class="showcase-card showcase-card--nord scroll-reveal" data-delay="240" data-col="right" aria-label="NØRD project">
-          <div class="card-thumb" aria-hidden="true"><img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80" alt="" loading="lazy"></div>
-          <div>
-            <div class="showcase-card-name">NØRD</div>
-            <div class="showcase-card-meta">Digital Editorial · 2023</div>
+          <div class="concept-body">
+            <span class="concept-num">04 / 04</span>
+            <h2 class="concept-name">NØRD</h2>
+            <div class="concept-rule"></div>
+            <p class="concept-summary">Type as territory. An editorial platform where typography moves like thought — restless, curious, never still.</p>
+            <span class="concept-meta">Digital Editorial · 2023</span>
           </div>
-          <span class="showcase-card-arrow" aria-hidden="true">→</span>
         </article>
 
       </div>
@@ -1376,31 +2215,138 @@
   </section>
 
   <!-- ================================================
-       PROCESSO (4.5)
+       SHOWREEL (4.5)
+  ================================================ -->
+  <section class="showreel" aria-label="Showreel">
+    <div class="showreel-inner">
+      <p class="section-label clip-reveal">Showreel</p>
+      <div class="showreel-stage scroll-reveal" id="showreel-stage" role="button" tabindex="0" aria-label="Play showreel" data-glow>
+        <div class="showreel-overlay">
+          <div class="showreel-play-btn" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M6.5 4.5l10 5.5-10 5.5V4.5z"/>
+            </svg>
+          </div>
+          <span class="showreel-play-label">Play reel</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showreel lightbox -->
+  <div class="showreel-lightbox" id="showreel-lightbox" aria-modal="true" role="dialog" aria-label="Showreel video">
+    <div class="showreel-lightbox-wrap">
+      <button class="showreel-lightbox-close" id="showreel-close">Close ✕</button>
+      <video id="showreel-video" controls playsinline>
+        <!-- Replace src with your Remotion-rendered video file -->
+        <source src="showreel.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+
+  <!-- ================================================
+       PROCESSO (4.6)
   ================================================ -->
   <section class="processo" aria-label="Process">
     <div class="processo-inner" id="processo-inner">
+      <p class="section-label clip-reveal">Process</p>
       <div class="processo-timeline" id="processo-timeline" aria-hidden="true"></div>
       <div class="processo-grid">
 
-        <div class="processo-step scroll-reveal" data-delay="0">
-          <div class="processo-number">01</div>
-          <div class="processo-title">Brief</div>
+        <!-- 01 Brief -->
+        <div class="processo-step scroll-reveal" data-glow data-delay="0">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img
+                src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&q=80&fit=crop"
+                alt="Brief — discovery session"
+                loading="lazy"
+              >
+              <div class="flip-card-front-content">
+                <div class="processo-number">01</div>
+                <div class="processo-title">Brief</div>
+              </div>
+            </div>
+            <div class="flip-card-back">
+              <div class="processo-number">01</div>
+              <div class="processo-title">Brief</div>
+              <p class="flip-card-desc">
+                Deep listening. We map your goals, audience, and constraints — turning ambiguity into a clear creative mandate before a single pixel moves.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div class="processo-step scroll-reveal" data-delay="120">
-          <div class="processo-number">02</div>
-          <div class="processo-title">Direction</div>
+        <!-- 02 Direction -->
+        <div class="processo-step scroll-reveal" data-glow data-delay="120">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img
+                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80&fit=crop"
+                alt="Direction — visual language"
+                loading="lazy"
+              >
+              <div class="flip-card-front-content">
+                <div class="processo-number">02</div>
+                <div class="processo-title">Direction</div>
+              </div>
+            </div>
+            <div class="flip-card-back">
+              <div class="processo-number">02</div>
+              <div class="processo-title">Direction</div>
+              <p class="flip-card-desc">
+                We establish the visual language — palette, motion personality, typographic voice — so every decision that follows is deliberate, not accidental.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div class="processo-step scroll-reveal" data-delay="240">
-          <div class="processo-number">03</div>
-          <div class="processo-title">Choreography</div>
+        <!-- 03 Choreography -->
+        <div class="processo-step scroll-reveal" data-glow data-delay="240">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img
+                src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=600&q=80&fit=crop"
+                alt="Choreography — motion design"
+                loading="lazy"
+              >
+              <div class="flip-card-front-content">
+                <div class="processo-number">03</div>
+                <div class="processo-title">Choreography</div>
+              </div>
+            </div>
+            <div class="flip-card-back">
+              <div class="processo-number">03</div>
+              <div class="processo-title">Choreography</div>
+              <p class="flip-card-desc">
+                Timing, easing, sequencing. We storyboard every interaction so motion guides attention rather than distracting from it — purpose over spectacle.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div class="processo-step scroll-reveal" data-delay="360">
-          <div class="processo-number">04</div>
-          <div class="processo-title">Code</div>
+        <!-- 04 Code -->
+        <div class="processo-step scroll-reveal" data-glow data-delay="360">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img
+                src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&q=80&fit=crop"
+                alt="Code — precision craft"
+                loading="lazy"
+              >
+              <div class="flip-card-front-content">
+                <div class="processo-number">04</div>
+                <div class="processo-title">Code</div>
+              </div>
+            </div>
+            <div class="flip-card-back">
+              <div class="processo-number">04</div>
+              <div class="processo-title">Code</div>
+              <p class="flip-card-desc">
+                Design intent becomes production reality. We build with performance and precision — 60 fps, accessible, and shipped exactly as imagined.
+              </p>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -1408,11 +2354,51 @@
   </section>
 
   <!-- ================================================
-       CTA (4.6)
+       TESTIMONIALS (4.7)
+  ================================================ -->
+  <section class="testimonials" aria-label="Client testimonials">
+    <div class="testimonials-inner">
+      <p class="section-label clip-reveal">Clients</p>
+      <div class="testimonials-grid">
+
+        <div class="testimonial-card scroll-reveal" data-glow data-delay="0">
+          <span class="testimonial-mark" aria-hidden="true">"</span>
+          <p class="testimonial-quote">KURO didn't just deliver an animation — they delivered a language. Every transition felt intentional, like the brand finally had a voice in motion.</p>
+          <div class="testimonial-author">
+            <span class="testimonial-name">Lena Fischer</span>
+            <span class="testimonial-role">Creative Director · VANTA</span>
+          </div>
+        </div>
+
+        <div class="testimonial-card scroll-reveal" data-glow data-delay="100">
+          <span class="testimonial-mark" aria-hidden="true">"</span>
+          <p class="testimonial-quote">The team understood our product faster than agencies we'd worked with for years. The result was motion that sold — not just looked good.</p>
+          <div class="testimonial-author">
+            <span class="testimonial-name">Rafael Mota</span>
+            <span class="testimonial-role">Head of Product · SOLIS</span>
+          </div>
+        </div>
+
+        <div class="testimonial-card scroll-reveal" data-glow data-delay="200">
+          <span class="testimonial-mark" aria-hidden="true">"</span>
+          <p class="testimonial-quote">Working with KURO felt like collaborating with a choreographer. They asked the right questions first, then moved with absolute precision.</p>
+          <div class="testimonial-author">
+            <span class="testimonial-name">Yuki Tanaka</span>
+            <span class="testimonial-role">Founder · NØRD Editorial</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       CTA (4.8)
   ================================================ -->
   <section class="cta" aria-labelledby="cta-heading">
-    <div class="cta-inner">
-      <h2 class="cta-h2 scroll-reveal" id="cta-heading">Start a conversation.</h2>
+    <span class="cta-bg-word" aria-hidden="true">KURO</span>
+    <div class="cta-inner" data-glow>
+      <h2 class="cta-h2 scroll-reveal" id="cta-heading">Start a <span class="text-ember">conversation.</span></h2>
       <p class="cta-sub scroll-reveal" data-delay="80">New projects begin with a single message.</p>
       <div class="cta-email-wrap scroll-reveal" data-delay="160">
         <a href="mailto:hello@kuro.studio" class="magnetic-cta">hello@kuro.studio</a>
@@ -1435,6 +2421,25 @@
             <circle cx="21" cy="21" r="1.5" fill="var(--kuro-ember)"/>
           </svg>KURO<span class="dot" aria-hidden="true">·</span>
         </a>
+        <nav class="footer-social" aria-label="Social links">
+          <a href="#" class="footer-social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <circle cx="12" cy="12" r="4.5"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+          <a href="#" class="footer-social-link" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.25 8.5h4.5V24H.25V8.5zM8.5 8.5H13v2.12h.06C13.72 9.28 15.5 8 18 8c4.75 0 5.63 3.13 5.63 7.19V24h-4.5v-7.86c0-1.88-.03-4.29-2.63-4.29-2.63 0-3.03 2.06-3.03 4.16V24H8.5V8.5z"/>
+            </svg>
+          </a>
+          <a href="#" class="footer-social-link" aria-label="Behance">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6.938 4.503c.702 0 1.34.06 1.92.188.577.13 1.07.33 1.485.61.41.28.733.65.96 1.12.225.47.34 1.05.34 1.73 0 .74-.17 1.36-.507 1.86-.338.5-.837.91-1.502 1.22.906.26 1.576.72 2.022 1.37.448.66.665 1.45.665 2.36 0 .75-.13 1.39-.41 1.93-.28.55-.67 1-1.16 1.35-.49.35-1.05.6-1.68.76-.63.16-1.28.24-1.96.24H0V4.51h6.938v-.007zM16.94 6.41v1.57h4.66V6.41h-4.66zm-2.53 5.9c.46.45 1.12.67 1.97.67.61 0 1.14-.15 1.58-.46.44-.3.71-.63.82-.98h2.75c-.44 1.37-1.1 2.35-2.01 2.95-.9.6-1.99.9-3.27.9-1.08 0-2.03-.17-2.86-.5-.83-.34-1.53-.82-2.1-1.45-.56-.63-.99-1.38-1.28-2.26-.29-.87-.43-1.83-.43-2.85 0-.98.15-1.9.46-2.75.3-.85.75-1.6 1.33-2.23.58-.63 1.28-1.12 2.1-1.47.82-.35 1.75-.52 2.79-.52 1.14 0 2.13.22 2.97.65.84.43 1.53 1.02 2.06 1.76.53.74.9 1.58 1.13 2.5.22.93.3 1.9.23 2.9H14.0c.04.95.27 1.65.73 2.1h-.32zm1.54-5.34c-.48 0-.88.07-1.2.2-.32.13-.58.3-.77.52-.19.22-.33.47-.42.75-.09.28-.15.57-.17.88h4.72c-.12-.67-.37-1.2-.76-1.57-.38-.37-.89-.56-1.52-.56l.12-.22z"/>
+            </svg>
+          </a>
+        </nav>
         <span class="footer-locations">Tokyo / São Paulo / Remote</span>
       </div>
       <p class="footer-copyright">© 2026 KURO Studio</p>
@@ -1447,6 +2452,35 @@
     ================================================ */
     const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+
+    /* ================================================
+       SHOWREEL LIGHTBOX
+    ================================================ */
+    (function initShowreel() {
+      const stage   = document.getElementById('showreel-stage');
+      const lb      = document.getElementById('showreel-lightbox');
+      const closeBtn= document.getElementById('showreel-close');
+      const video   = document.getElementById('showreel-video');
+      if (!stage || !lb) return;
+
+      function open() {
+        lb.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        if (video) video.play().catch(() => {});
+      }
+
+      function close() {
+        lb.classList.remove('is-open');
+        document.body.style.overflow = '';
+        if (video) { video.pause(); video.currentTime = 0; }
+      }
+
+      stage.addEventListener('click', open);
+      stage.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') open(); });
+      closeBtn?.addEventListener('click', close);
+      lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    })();
 
     /* ================================================
        FRAME COUNTER
@@ -1463,58 +2497,39 @@
     })();
 
     /* ================================================
-       FOG — cursor parallax + scroll fade
-    ================================================ */
-    (function initFog() {
-      if (REDUCED_MOTION) return;
-      const fog = document.getElementById('kuro-fog');
-      if (!fog) return;
-      const blobs = [
-        { el: document.getElementById('fog-1'), factor: 0.04 },
-        { el: document.getElementById('fog-2'), factor: 0.03 },
-        { el: document.getElementById('fog-3'), factor: 0.025 },
-        { el: document.getElementById('fog-4'), factor: 0.015 },
-      ];
-
-      // Cursor parallax — outer blob wrapper shifts toward cursor
-      window.addEventListener('mousemove', (e) => {
-        const cx = e.clientX - window.innerWidth  / 2;
-        const cy = e.clientY - window.innerHeight / 2;
-        blobs.forEach(({ el, factor }) => {
-          el.style.transform = `translate(${cx * factor}px, ${cy * factor}px)`;
-        });
-      }, { passive: true });
-
-      // Scroll fade — fog dims as user scrolls down (never disappears fully)
-      window.addEventListener('scroll', () => {
-        const scrollable = document.body.scrollHeight - window.innerHeight;
-        const progress   = scrollable > 0 ? window.scrollY / scrollable : 0;
-        fog.style.opacity = `${1 - Math.min(progress, 1) * 0.6}`;
-      }, { passive: true });
-    })();
-
-
-    /* ================================================
        NAV — scroll state
     ================================================ */
     const nav             = document.getElementById('nav');
     const scrollProgressBar = document.getElementById('scroll-progress');
     const heroInner       = document.querySelector('.hero-inner');
 
-    window.addEventListener('scroll', () => {
-      // Nav blur
-      nav.classList.toggle('scrolled', window.scrollY > 80);
+    // Hide scroll indicator on first scroll
+    const heroScrollEl = document.querySelector('.hero-scroll');
+    if (heroScrollEl) {
+      window.addEventListener('scroll', function hideScrollIndicator() {
+        if (window.scrollY > 40) {
+          heroScrollEl.classList.add('is-hidden');
+          window.removeEventListener('scroll', hideScrollIndicator);
+        }
+      }, { passive: true });
+    }
 
-      // Progress bar
-      const scrollable = document.body.scrollHeight - window.innerHeight;
-      const progress   = scrollable > 0 ? window.scrollY / scrollable : 0;
-      scrollProgressBar.style.transform = `scaleX(${Math.min(progress, 1)})`;
+    if (nav && scrollProgressBar) {
+      window.addEventListener('scroll', () => {
+        // Nav blur
+        nav.classList.toggle('scrolled', window.scrollY > 80);
 
-      // Hero parallax
-      if (heroInner && !REDUCED_MOTION) {
-        heroInner.style.transform = `translateY(${window.scrollY * 0.3}px)`;
-      }
-    }, { passive: true });
+        // Progress bar
+        const scrollable = document.body.scrollHeight - window.innerHeight;
+        const progress   = scrollable > 0 ? window.scrollY / scrollable : 0;
+        scrollProgressBar.style.transform = `scaleX(${Math.min(progress, 1)})`;
+
+        // Hero parallax
+        if (heroInner && !REDUCED_MOTION) {
+          heroInner.style.transform = `translateY(${window.scrollY * 0.3}px)`;
+        }
+      }, { passive: true });
+    }
 
 
     /* ================================================
@@ -1703,6 +2718,7 @@
       });
     }
 
+
     /* ================================================
        CUSTOM CURSOR
     ================================================ */
@@ -1743,7 +2759,7 @@
       }, { passive: true });
 
       // Expand ring on interactive elements
-      document.querySelectorAll('a, button, .showcase-card').forEach(el => {
+      document.querySelectorAll('a, button, .concept-item').forEach(el => {
         el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
         el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
       });
@@ -1751,19 +2767,308 @@
 
 
     /* ================================================
-       CARD 3D PERSPECTIVE HOVER
+       CURSOR GLOW
     ================================================ */
-    (function initCard3D() {
+    (function initCursorGlow() {
       if (REDUCED_MOTION) return;
+      const glow = document.getElementById('cursor-glow');
+      if (!glow) return;
 
-      document.querySelectorAll('.showcase-card').forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-          const rect = card.getBoundingClientRect();
-          const relX =  (e.clientX - rect.left)  / rect.width  - 0.5;
-          const relY =  (e.clientY - rect.top)   / rect.height - 0.5;
-          const rotX = relY * -12;
-          const rotY = relX *  12;
-          card.style.transform = `translateY(-2px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      let mouseX = -500, mouseY = -500;
+      let glowX  = -500, glowY  = -500, glowR = 240;
+      let targetX = -500, targetY = -500, targetR = 240;
+      let activeEl = null;
+      let seeded = false;
+
+      window.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!seeded) { glowX = mouseX; glowY = mouseY; seeded = true; }
+      }, { passive: true });
+
+      window.addEventListener('mouseleave', () => { mouseX = -500; mouseY = -500; });
+
+      document.querySelectorAll('[data-glow]').forEach(el => {
+        el.addEventListener('mouseenter', () => { activeEl = el; });
+        el.addEventListener('mouseleave', () => { if (activeEl === el) activeEl = null; });
+      });
+
+      (function tick() {
+        if (activeEl) {
+          const r = activeEl.getBoundingClientRect();
+          targetX = r.left + r.width  / 2;
+          targetY = r.top  + r.height / 2;
+          targetR = Math.hypot(r.width, r.height) * 0.62;
+        } else {
+          targetX = mouseX;
+          targetY = mouseY;
+          targetR = 240;
+        }
+
+        const posEase = activeEl ? 0.07 : 0.14;
+        glowX += (targetX - glowX) * posEase;
+        glowY += (targetY - glowY) * posEase;
+        glowR += (targetR - glowR) * 0.09;
+
+        glow.style.background =
+          `radial-gradient(circle ${Math.round(glowR)}px at ${glowX.toFixed(1)}px ${glowY.toFixed(1)}px,` +
+          `rgba(255,77,28,0.17) 0%,` +
+          `rgba(255,77,28,0.06) 45%,` +
+          `transparent 100%)`;
+
+        requestAnimationFrame(tick);
+      })();
+    })();
+
+    /* ================================================
+       FLIP CARDS
+    ================================================ */
+    (function initFlipCards() {
+      document.querySelectorAll('.processo-step').forEach(step => {
+        const inner = step.querySelector('.flip-card-inner');
+        if (!inner) return;
+
+        let returning = false;
+
+        // Listen on the step (never rotates) — stable hit area throughout animation
+        step.addEventListener('mouseenter', () => {
+          returning = false;
+          inner.style.transform = 'rotateY(180deg)';
+        });
+
+        step.addEventListener('mouseleave', () => {
+          returning = true;
+          inner.style.transform = 'rotateY(360deg)';
+        });
+
+        inner.addEventListener('transitionend', (e) => {
+          if (e.target !== inner || e.propertyName !== 'transform') return;
+          if (returning) {
+            returning = false;
+            inner.style.transition = 'none';
+            inner.style.transform  = 'rotateY(0deg)';
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              inner.style.transition = '';
+            }));
+          }
+        });
+      });
+    })();
+
+    /* ================================================
+       ZOOM PARALLAX — AURA
+       BG layers: zoom radially from center + fade out.
+       Center image: translates to left rail + grows.
+       Concept text: slides in from right.
+    ================================================ */
+    (function initZoomParallax() {
+      const track    = document.getElementById('zp-track');
+      const centerEl = document.getElementById('zp-center-wrap');
+      const textEl   = document.getElementById('zp-concept-text');
+      const labelEl  = document.getElementById('zp-label');
+      if (!track || !centerEl || !textEl) return;
+
+      const bgLayers = Array.from(track.querySelectorAll('.zp-layer')).map(el => ({
+        el, max: parseFloat(el.dataset.scale) || 4
+      }));
+
+      const clamp = (v,lo,hi) => Math.max(lo, Math.min(hi, v));
+      const lerp  = (a,b,t)   => a + (b-a) * t;
+      const ss    = t          => t * t * (3-2*t);
+      const eo3   = t          => 1 - Math.pow(1-t, 3);
+      const sub   = (p,s,e)   => ss(clamp((p-s)/(e-s), 0, 1));
+
+      // FROM: centered portrait · TO: left rail
+      const FROM = { wF: 0.25, hF: 0.33 };
+      const TO   = { wF: 0.42, hF: 0.76, lF: 0.04 };
+
+      if (REDUCED_MOTION) {
+        // Show final state immediately
+        bgLayers.forEach(({ el }) => { el.style.opacity = '0'; });
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const w = TO.wF*vw, h = TO.hF*vh;
+        centerEl.style.cssText = `width:${w}px;height:${h}px;left:${TO.lF*vw}px;top:${(vh-h)/2}px`;
+        textEl.style.cssText   = 'opacity:1;transform:translateY(-50%) translateX(0)';
+        return;
+      }
+
+      function resetCenter() {
+        const vw = window.innerWidth, vh = window.innerHeight;
+        const w = FROM.wF*vw, h = FROM.hF*vh;
+        centerEl.style.width  = w + 'px';
+        centerEl.style.height = h + 'px';
+        centerEl.style.left   = ((vw-w)/2) + 'px';
+        centerEl.style.top    = ((vh-h)/2) + 'px';
+        centerEl.querySelector('img').style.filter = 'saturate(0.5) sepia(0.15) brightness(0.6)';
+      }
+      resetCenter();
+      window.addEventListener('resize', resetCenter, { passive: true });
+
+      function update() {
+        const rect       = track.getBoundingClientRect();
+        const scrollable = track.offsetHeight - window.innerHeight;
+        if (scrollable <= 0) { requestAnimationFrame(update); return; }
+
+        const rawP = clamp(-rect.top / scrollable, 0, 1);
+        const p    = ss(rawP);
+        const vw   = window.innerWidth, vh = window.innerHeight;
+
+        if (labelEl) labelEl.style.opacity = String(clamp(1 - p*3.5, 0, 1));
+
+        // BG: zoom radially + fade
+        bgLayers.forEach(({ el, max }) => {
+          el.style.transform = `scale(${(1 + (max-1) * sub(rawP, 0, 0.72)).toFixed(4)})`;
+          el.style.opacity   = (1 - sub(p, 0, 0.60)).toFixed(4);
+        });
+
+        // Center image: translate + grow
+        const imgP  = ss(sub(p, 0.08, 0.98));
+        const fromW = FROM.wF*vw, fromH = FROM.hF*vh;
+        const toW   = TO.wF*vw,   toH   = TO.hF*vh;
+        centerEl.style.width  = lerp(fromW, toW,  imgP).toFixed(2) + 'px';
+        centerEl.style.height = lerp(fromH, toH,  imgP).toFixed(2) + 'px';
+        centerEl.style.left   = lerp((vw-fromW)/2, TO.lF*vw, imgP).toFixed(2) + 'px';
+        centerEl.style.top    = lerp((vh-fromH)/2, (vh-toH)/2, imgP).toFixed(2) + 'px';
+        centerEl.querySelector('img').style.filter =
+          `saturate(${lerp(0.50,0.60,imgP).toFixed(3)}) brightness(${lerp(0.60,0.55,imgP).toFixed(3)})`;
+
+        // Text: slide in from right
+        const txP = eo3(sub(p, 0.62, 0.96));
+        textEl.style.opacity   = txP.toFixed(4);
+        textEl.style.transform = `translateY(-50%) translateX(${lerp(28,0,txP).toFixed(2)}px)`;
+
+        requestAnimationFrame(update);
+      }
+
+      requestAnimationFrame(update);
+
+      // 3D cursor tilt on the AURA center image
+      let zpRX = 0, zpRY = 0, zpTX = 0, zpTY = 0, zpRaf = null;
+      centerEl.addEventListener('mouseenter', () => {
+        if (zpRaf) return;
+        const tick = () => {
+          zpRX += (zpTX - zpRX) * 0.12;
+          zpRY += (zpTY - zpRY) * 0.12;
+          centerEl.style.transform =
+            `perspective(700px) rotateX(${zpRX.toFixed(3)}deg) rotateY(${zpRY.toFixed(3)}deg)`;
+          zpRaf = requestAnimationFrame(tick);
+        };
+        zpRaf = requestAnimationFrame(tick);
+      });
+      centerEl.addEventListener('mousemove', e => {
+        const r = centerEl.getBoundingClientRect();
+        zpTY =  ((e.clientX - (r.left + r.width /2)) / (r.width /2)) * 9;
+        zpTX = -((e.clientY - (r.top  + r.height/2)) / (r.height/2)) * 6;
+      });
+      centerEl.addEventListener('mouseleave', () => {
+        zpTX = 0; zpTY = 0;
+        const settle = () => {
+          zpRX += (0 - zpRX) * 0.10;
+          zpRY += (0 - zpRY) * 0.10;
+          centerEl.style.transform =
+            `perspective(700px) rotateX(${zpRX.toFixed(3)}deg) rotateY(${zpRY.toFixed(3)}deg)`;
+          if (Math.abs(zpRX) > 0.02 || Math.abs(zpRY) > 0.02) {
+            zpRaf = requestAnimationFrame(settle);
+          } else {
+            centerEl.style.transform = '';
+            zpRaf = null;
+          }
+        };
+        cancelAnimationFrame(zpRaf);
+        zpRaf = requestAnimationFrame(settle);
+      });
+    })();
+
+
+    /* ================================================
+       CONCEPTS LIST — scroll-reveal
+    ================================================ */
+    (function initConceptsReveal() {
+      const items = document.querySelectorAll('.concept-item');
+      if (!items.length) return;
+
+      let lastY = window.scrollY;
+      let dir   = 'down';
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        dir = y >= lastY ? 'down' : 'up';
+        lastY = y;
+      }, { passive: true });
+
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const el    = entry.target;
+          const delay = parseInt(el.dataset.delay || '0');
+          if (entry.isIntersecting) {
+            setTimeout(() => el.classList.add('is-visible'), delay);
+          } else if (dir === 'up') {
+            el.classList.remove('is-visible');
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -5% 0px' });
+
+      items.forEach(el => obs.observe(el));
+
+      // 3D cursor tilt on concept card images
+      items.forEach(card => {
+        const imgBox = card.querySelector('.concept-img');
+        if (!imgBox) return;
+        let rX = 0, rY = 0, tX = 0, tY = 0, raf = null;
+
+        card.addEventListener('mouseenter', () => {
+          if (raf) return;
+          const tick = () => {
+            rX += (tX - rX) * 0.12;
+            rY += (tY - rY) * 0.12;
+            imgBox.style.transform =
+              `perspective(700px) rotateX(${rX.toFixed(3)}deg) rotateY(${rY.toFixed(3)}deg)`;
+            raf = requestAnimationFrame(tick);
+          };
+          raf = requestAnimationFrame(tick);
+        });
+        card.addEventListener('mousemove', e => {
+          const r = imgBox.getBoundingClientRect();
+          tY =  ((e.clientX - (r.left + r.width /2)) / (r.width /2)) * 9;
+          tX = -((e.clientY - (r.top  + r.height/2)) / (r.height/2)) * 6;
+        });
+        card.addEventListener('mouseleave', () => {
+          tX = 0; tY = 0;
+          const settle = () => {
+            rX += (0 - rX) * 0.10;
+            rY += (0 - rY) * 0.10;
+            imgBox.style.transform =
+              `perspective(700px) rotateX(${rX.toFixed(3)}deg) rotateY(${rY.toFixed(3)}deg)`;
+            if (Math.abs(rX) > 0.02 || Math.abs(rY) > 0.02) {
+              raf = requestAnimationFrame(settle);
+            } else {
+              imgBox.style.transform = '';
+              raf = null;
+            }
+          };
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(settle);
+        });
+      });
+    })();
+
+
+    /* ================================================
+       TESTIMONIAL CARDS — TILT + SPOTLIGHT
+    ================================================ */
+    (function initTestimonialTilt() {
+      if (REDUCED_MOTION) return;
+      document.querySelectorAll('.testimonial-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const r  = card.getBoundingClientRect();
+          const x  = e.clientX - r.left;
+          const y  = e.clientY - r.top;
+          const cx = r.width  / 2;
+          const cy = r.height / 2;
+          const rotY =  ((x - cx) / cx) * 8;
+          const rotX = -((y - cy) / cy) * 5;
+          card.style.transform = `perspective(900px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale(1.02)`;
+          card.style.setProperty('--mx', `${((x / r.width)  * 100).toFixed(1)}%`);
+          card.style.setProperty('--my', `${((y / r.height) * 100).toFixed(1)}%`);
         });
 
         card.addEventListener('mouseleave', () => {
@@ -1771,6 +3076,8 @@
         });
       });
     })();
+
+
   </script>
 </body>
 </html>
