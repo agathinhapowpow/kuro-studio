@@ -377,10 +377,13 @@
 
     .nav-inner {
       height: 100%;
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
     }
+
+    .nav-links { justify-self: center; }
+    .nav-cta-wrap { justify-self: end; }
 
     .nav-logo {
       font-size: 18px;
@@ -972,7 +975,7 @@
     }
 
     .zoom-parallax-track {
-      height: 320vh;
+      height: 480vh;
       position: relative;
     }
 
@@ -1239,7 +1242,7 @@
        FLIP CARD
     =================================================== */
     .processo-step {
-      padding-top: var(--sp-8);
+      padding-top: var(--sp-4);
       perspective: 1000px;
     }
 
@@ -1954,6 +1957,245 @@
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 77, 28, 0.65);
     }
+
+    /* ===================================================
+       NAV LINKS (added)
+    =================================================== */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-8);
+    }
+
+    .nav-link {
+      font-size: var(--text-small);
+      letter-spacing: var(--ls-small);
+      color: var(--kuro-muted);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease-out-expo);
+      line-height: var(--lh-small);
+    }
+
+    .nav-link:hover { color: var(--kuro-text); }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+
+    /* NAV VEIL — process instant-jump transition */
+    #nav-veil {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      background: var(--kuro-void);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+    }
+    #nav-veil.visible { opacity: 1; }
+
+    /* ===================================================
+       HERO BOTTOM TICKER
+    =================================================== */
+    .hero-motion-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border-top: 1px solid var(--kuro-border);
+      opacity: 0;
+      animation: kuro-reveal 600ms var(--ease-out-expo) 1800ms forwards;
+      pointer-events: none;
+    }
+
+    .hero-motion-bar-inner {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: ticker-scroll 45s linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .hero-motion-bar-item {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-3);
+      padding: 0 var(--sp-6);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--kuro-muted);
+      opacity: 0.55;
+    }
+
+    .hero-motion-bar-item b {
+      color: var(--kuro-ember);
+      font-weight: 500;
+      opacity: 1;
+    }
+
+    .hero-motion-bar-dot {
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--kuro-ember);
+      opacity: 0.3;
+      flex-shrink: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-motion-bar-inner { animation: none; }
+    }
+
+    /* ===================================================
+       CAPABILITIES MARQUEE
+    =================================================== */
+    .marquee-band {
+      overflow: hidden;
+      border-top: 1px solid var(--kuro-border);
+      border-bottom: 1px solid var(--kuro-border);
+      position: relative;
+      z-index: 1;
+    }
+
+    .marquee-track {
+      overflow: hidden;
+      padding: 11px 0;
+      display: flex;
+    }
+
+    .marquee-track + .marquee-track {
+      padding-top: 0;
+      padding-bottom: 11px;
+      border-top: 1px solid var(--kuro-border);
+    }
+
+    .marquee-inner {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    .marquee-inner--fwd { animation: marquee-fwd 35s linear infinite; }
+    .marquee-inner--rev { animation: marquee-rev 28s linear infinite; }
+
+    @keyframes marquee-fwd {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @keyframes marquee-rev {
+      from { transform: translateX(-50%); }
+      to   { transform: translateX(0); }
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--kuro-muted);
+      padding: 0 var(--sp-6);
+      white-space: nowrap;
+    }
+
+    .marquee-item--ember { color: var(--kuro-ember); opacity: 0.75; }
+
+    .marquee-dot {
+      display: inline-block;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--kuro-ember);
+      opacity: 0.28;
+      margin: 0 var(--sp-2);
+      flex-shrink: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .marquee-inner { animation: none; }
+    }
+
+
+    /* ===================================================
+       PROCESS STEP ANNOTATION
+    =================================================== */
+    .processo-annotation {
+      margin-top: var(--sp-3);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+    }
+
+    .annotation-tag {
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--kuro-muted);
+      opacity: 0.4;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      border: 1px solid var(--kuro-border);
+      padding: 2px 5px;
+      border-radius: var(--radius-sm);
+    }
+
+    .annotation-dur {
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: var(--kuro-ember);
+      opacity: 0.5;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    /* ===================================================
+       FOOTER COORDINATES
+    =================================================== */
+    .footer-meta {
+      margin-top: var(--sp-4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+
+    .footer-coords {
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      color: var(--kuro-muted);
+      opacity: 0.28;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .footer-timezone {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-6);
+    }
+
+    .footer-tz-item {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--kuro-muted);
+      opacity: 0.25;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+
+    .footer-tz-sep {
+      color: var(--kuro-muted);
+      opacity: 0.15;
+    }
+
   </style>
 </head>
 <body>
@@ -1968,6 +2210,9 @@
   <div class="kuro-blob kuro-blob-2"></div>
   <div class="kuro-blob kuro-blob-3"></div>
 </div>
+
+<!-- NAV VEIL -->
+<div id="nav-veil" aria-hidden="true"></div>
 
 <!-- SCROLL PROGRESS -->
 <div id="scroll-progress" aria-hidden="true"></div>
@@ -1991,6 +2236,10 @@
           <circle cx="21" cy="21" r="1.5" fill="var(--kuro-ember)"/>
         </svg>KURO
       </a>
+      <nav class="nav-links" aria-label="Site sections">
+        <a href="#work" class="nav-link">Work</a>
+        <a href="#process" class="nav-link">Process</a>
+      </nav>
       <div class="nav-cta-wrap">
         <a href="mailto:hello@kuro.studio" class="nav-cta">hello@kuro.studio</a>
       </div>
@@ -2029,10 +2278,111 @@
         </div>
       </div>
     </div>
+    <!-- bottom motion ticker -->
+    <div class="hero-motion-bar" aria-hidden="true">
+      <div class="hero-motion-bar-inner">
+        <span class="hero-motion-bar-item"><b>60fps</b></span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">Motion Identity</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">Brand Films</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">Digital Campaigns</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">Visual Systems</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">UI Motion</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item"><b>Since 2019</b></span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">40+ Brands</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">3 Continents</span>
+        <span class="hero-motion-bar-dot"></span>
+        <!-- duplicate for seamless loop -->
+        <span class="hero-motion-bar-item"><b>60fps</b></span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">Motion Identity</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">Brand Films</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">Digital Campaigns</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">Visual Systems</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">UI Motion</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item"><b>Since 2019</b></span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">40+ Brands</span>
+        <span class="hero-motion-bar-dot"></span>
+        <span class="hero-motion-bar-item">3 Continents</span>
+        <span class="hero-motion-bar-dot"></span>
+      </div>
+    </div>
+
     <div class="hero-scroll" aria-hidden="true">
       <div class="hero-scroll-line"></div>
     </div>
   </section>
+
+  <!-- ================================================
+       CAPABILITIES MARQUEE
+  ================================================ -->
+  <div class="marquee-band" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-inner marquee-inner--fwd">
+        <span class="marquee-item">Motion Identity</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">Brand Films</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Digital Campaigns</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Visual Systems</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">UI Motion</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Title Sequences</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Generative Art</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">Kinetic Typography</span><span class="marquee-dot"></span>
+        <span class="marquee-item">3D Animation</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Interactive Installs</span><span class="marquee-dot"></span>
+        <!-- duplicate -->
+        <span class="marquee-item">Motion Identity</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">Brand Films</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Digital Campaigns</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Visual Systems</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">UI Motion</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Title Sequences</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Generative Art</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">Kinetic Typography</span><span class="marquee-dot"></span>
+        <span class="marquee-item">3D Animation</span><span class="marquee-dot"></span>
+        <span class="marquee-item">Interactive Installs</span><span class="marquee-dot"></span>
+      </div>
+    </div>
+    <div class="marquee-track">
+      <div class="marquee-inner marquee-inner--rev">
+        <span class="marquee-item">AXON</span><span class="marquee-dot"></span>
+        <span class="marquee-item">PRIM</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">VELA</span><span class="marquee-dot"></span>
+        <span class="marquee-item">KIRA</span><span class="marquee-dot"></span>
+        <span class="marquee-item">LUMIS</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">NØRD</span><span class="marquee-dot"></span>
+        <span class="marquee-item">SOLIS</span><span class="marquee-dot"></span>
+        <span class="marquee-item">VANTA</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">AURA</span><span class="marquee-dot"></span>
+        <span class="marquee-item">NOVA</span><span class="marquee-dot"></span>
+        <span class="marquee-item">KURO·</span><span class="marquee-dot"></span>
+        <!-- duplicate -->
+        <span class="marquee-item">AXON</span><span class="marquee-dot"></span>
+        <span class="marquee-item">PRIM</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">VELA</span><span class="marquee-dot"></span>
+        <span class="marquee-item">KIRA</span><span class="marquee-dot"></span>
+        <span class="marquee-item">LUMIS</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">NØRD</span><span class="marquee-dot"></span>
+        <span class="marquee-item">SOLIS</span><span class="marquee-dot"></span>
+        <span class="marquee-item">VANTA</span><span class="marquee-dot"></span>
+        <span class="marquee-item marquee-item--ember">AURA</span><span class="marquee-dot"></span>
+        <span class="marquee-item">NOVA</span><span class="marquee-dot"></span>
+        <span class="marquee-item">KURO·</span><span class="marquee-dot"></span>
+      </div>
+    </div>
+  </div>
 
   <!-- ================================================
        STUDIO (4.2)
@@ -2109,7 +2459,7 @@
        Center AURA image translates to left rail.
        AURA concept text slides in alongside.
   ================================================ -->
-  <section class="zoom-parallax" aria-label="Selected work">
+  <section class="zoom-parallax" id="work" aria-label="Selected work">
     <div class="zoom-parallax-track" id="zp-track">
       <div class="zoom-parallax-sticky">
 
@@ -2247,7 +2597,7 @@
   <!-- ================================================
        PROCESSO (4.6)
   ================================================ -->
-  <section class="processo" aria-label="Process">
+  <section class="processo" id="process" aria-label="Process">
     <div class="processo-inner" id="processo-inner">
       <p class="section-label clip-reveal">Process</p>
       <div class="processo-timeline" id="processo-timeline" aria-hidden="true"></div>
@@ -2255,6 +2605,10 @@
 
         <!-- 01 Brief -->
         <div class="processo-step scroll-reveal" data-glow data-delay="0">
+          <div class="processo-annotation">
+            <span class="annotation-tag">01 · Discovery</span>
+            <span class="annotation-dur">2–3d</span>
+          </div>
           <div class="flip-card-inner">
             <div class="flip-card-front">
               <img
@@ -2279,6 +2633,10 @@
 
         <!-- 02 Direction -->
         <div class="processo-step scroll-reveal" data-glow data-delay="120">
+          <div class="processo-annotation">
+            <span class="annotation-tag">02 · Creative</span>
+            <span class="annotation-dur">3–5d</span>
+          </div>
           <div class="flip-card-inner">
             <div class="flip-card-front">
               <img
@@ -2303,6 +2661,10 @@
 
         <!-- 03 Choreography -->
         <div class="processo-step scroll-reveal" data-glow data-delay="240">
+          <div class="processo-annotation">
+            <span class="annotation-tag">03 · Production</span>
+            <span class="annotation-dur">1–3w</span>
+          </div>
           <div class="flip-card-inner">
             <div class="flip-card-front">
               <img
@@ -2327,6 +2689,10 @@
 
         <!-- 04 Code -->
         <div class="processo-step scroll-reveal" data-glow data-delay="360">
+          <div class="processo-annotation">
+            <span class="annotation-tag">04 · Delivery</span>
+            <span class="annotation-dur">1–2w</span>
+          </div>
           <div class="flip-card-inner">
             <div class="flip-card-front">
               <img
@@ -2443,6 +2809,16 @@
         <span class="footer-locations">Tokyo / São Paulo / Remote</span>
       </div>
       <p class="footer-copyright">© 2026 KURO Studio</p>
+      <div class="footer-meta" aria-hidden="true">
+        <span class="footer-coords">23°32′S 46°38′W · 35°41′N 139°41′E · Remote</span>
+        <div class="footer-timezone">
+          <span class="footer-tz-item"><span class="footer-tz-city">SP</span> <span id="tz-sp">--:--</span></span>
+          <span class="footer-tz-sep">·</span>
+          <span class="footer-tz-item"><span class="footer-tz-city">TYO</span> <span id="tz-tyo">--:--</span></span>
+          <span class="footer-tz-sep">·</span>
+          <span class="footer-tz-item"><span class="footer-tz-city">UTC</span> <span id="tz-utc">--:--</span></span>
+        </div>
+      </div>
     </div>
   </footer>
 
@@ -3077,6 +3453,54 @@
       });
     })();
 
+    /* ================================================
+       FOOTER TIMEZONES
+    ================================================ */
+    (function initTimezones() {
+      const spEl  = document.getElementById('tz-sp');
+      const tyoEl = document.getElementById('tz-tyo');
+      const utcEl = document.getElementById('tz-utc');
+      if (!spEl || !tyoEl || !utcEl) return;
+
+      function fmt(tz) {
+        return new Date().toLocaleTimeString('en-GB', {
+          timeZone: tz,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+      }
+
+      function tick() {
+        spEl.textContent  = fmt('America/Sao_Paulo');
+        tyoEl.textContent = fmt('Asia/Tokyo');
+        utcEl.textContent = fmt('UTC');
+      }
+
+      tick();
+      setInterval(tick, 30000);
+    })();
+
+    /* ================================================
+       NAV ANCHOR — PROCESS: veil fade + instant jump
+       Work uses default smooth-scroll from CSS.
+    ================================================ */
+    (function initNavJump() {
+      const veil = document.getElementById('nav-veil');
+
+      document.querySelector('a[href="#process"]').addEventListener('click', function(e) {
+        const target = document.getElementById('process');
+        if (!target || !veil) return;
+        e.preventDefault();
+        veil.classList.add('visible');
+        setTimeout(() => {
+          window.scrollTo({ top: target.offsetTop, behavior: 'instant' });
+          requestAnimationFrame(() => {
+            veil.classList.remove('visible');
+          });
+        }, 220);
+      });
+    })();
 
   </script>
 </body>
