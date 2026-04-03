@@ -43,7 +43,7 @@
 
       /* Display */
       --text-display: clamp(48px, 6.5vw, 88px);
-      --ls-display:   0.06em;
+      --ls-display:   -0.03em;
       --lh-display:   1.08;
       --fw-display:   700;
 
@@ -166,36 +166,17 @@
       position: relative;
     }
 
-    /* ===================================================
-       SKIP LINK — accessibility
-    =================================================== */
-    .skip-link {
-      position: absolute;
-      top: -100px;
-      left: var(--sp-4);
-      z-index: 10000;
-      background: var(--kuro-ember);
-      color: var(--kuro-void);
-      font-size: var(--text-small);
-      font-weight: 600;
-      letter-spacing: var(--ls-small);
-      padding: var(--sp-2) var(--sp-4);
-      border-radius: var(--radius-sm);
-      text-decoration: none;
-      transition: top 200ms var(--ease-out-expo);
-    }
-    .skip-link:focus {
-      top: var(--sp-4);
-    }
-
-    /* Focus-visible ring — keyboard nav */
-    :focus-visible {
-      outline: 2px solid var(--kuro-ember);
-      outline-offset: 3px;
-      border-radius: var(--radius-sm);
-    }
-    :focus:not(:focus-visible) {
-      outline: none;
+    /* Grain noise overlay — full page, fixed, pointer-events:none */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.13;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px;
     }
 
     /* ===================================================
@@ -455,11 +436,6 @@
       text-decoration: none;
       transition: color var(--duration-fast) var(--ease-out-expo);
       line-height: var(--lh-small);
-      cursor: pointer;
-      touch-action: manipulation;
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
     }
 
     .nav-cta:hover {
@@ -652,15 +628,29 @@
       align-items: center;
       gap: var(--sp-2);
       padding: 12px 28px;
-      min-height: 44px;
       border-radius: 999px;
       position: relative;
       overflow: hidden;
-      cursor: pointer;
-      touch-action: manipulation;
       transition: background 300ms var(--ease-out-expo),
                   transform  300ms var(--ease-out-expo),
                   box-shadow 300ms var(--ease-out-expo);
+    }
+
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      animation: cta-shimmer 2.8s ease-in-out 1.8s infinite;
+    }
+
+    @keyframes cta-shimmer {
+      0%   { left: -100%; }
+      50%  { left: 120%;  }
+      100% { left: 120%;  }
     }
 
     .hero-cta:hover {
@@ -866,6 +856,7 @@
     .orbit-ring--1 {
       width: 80px;
       height: 80px;
+      animation: orbit-spin 8s linear infinite;
       border-color: rgba(255, 77, 28, 0.40);
       box-shadow: 0 0 12px rgba(255, 77, 28, 0.12);
     }
@@ -873,12 +864,14 @@
     .orbit-ring--2 {
       width: 160px;
       height: 160px;
+      animation: orbit-spin 16s linear infinite reverse;
       border-color: rgba(255, 77, 28, 0.22);
     }
 
     .orbit-ring--3 {
       width: 240px;
       height: 240px;
+      animation: orbit-spin 28s linear infinite;
       border-color: rgba(255, 77, 28, 0.12);
       box-shadow: 0 0 40px rgba(255, 77, 28, 0.06) inset;
     }
@@ -1123,20 +1116,14 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      filter: saturate(0.55) brightness(0.62);
-      transition: filter 700ms var(--ease-out-expo),
-                  transform 800ms var(--ease-out-expo);
-      will-change: transform, filter;
+      filter: saturate(0.65) brightness(0.68);
+      transition: filter 600ms var(--ease-out-expo),
+                  transform 600ms var(--ease-out-expo);
     }
 
     .concept-item:hover .concept-img img {
-      filter: saturate(0.80) brightness(0.80);
-      transform: scale(1.04);
-    }
-
-    .concept-item {
-      cursor: pointer;
-      touch-action: manipulation;
+      filter: saturate(0.88) brightness(0.84);
+      transform: scale(1.03);
     }
 
     .concept-num {
@@ -1151,11 +1138,10 @@
     .concept-name {
       font-size: clamp(36px, 5.5vw, 72px);
       font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 0.9;
+      letter-spacing: -0.03em;
+      line-height: 0.88;
       color: var(--kuro-text);
       margin-bottom: var(--sp-6);
-      text-wrap: balance;
     }
 
     .concept-rule {
@@ -1404,7 +1390,6 @@
       line-height: var(--lh-h2);
       color: var(--kuro-text);
       text-align: center;
-      text-wrap: balance;
     }
 
     .cta-sub {
@@ -1427,28 +1412,6 @@
       letter-spacing: var(--ls-body);
       display: inline-block;
       position: relative;
-      cursor: pointer;
-      touch-action: manipulation;
-      padding: var(--sp-3) 0;
-      transition: color 300ms var(--ease-out-expo);
-    }
-
-    .magnetic-cta::after {
-      content: '';
-      position: absolute;
-      bottom: 6px;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: var(--kuro-ember);
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform 400ms var(--ease-out-expo);
-    }
-
-    .magnetic-cta:hover::after {
-      transform: scaleX(1);
-      transform-origin: left;
     }
 
     /* ===================================================
@@ -1753,15 +1716,8 @@
 
     .footer-social-link {
       color: var(--kuro-muted);
-      transition: color 300ms var(--ease-out-expo);
+      transition: color 200ms;
       line-height: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      cursor: pointer;
-      touch-action: manipulation;
     }
 
     .footer-social-link:hover {
@@ -1771,7 +1727,6 @@
     .footer-social-link svg {
       width: 16px;
       height: 16px;
-      flex-shrink: 0;
     }
 
     /* ===================================================
@@ -2019,11 +1974,6 @@
       text-decoration: none;
       transition: color var(--duration-fast) var(--ease-out-expo);
       line-height: var(--lh-small);
-      cursor: pointer;
-      touch-action: manipulation;
-      min-height: 44px;
-      display: inline-flex;
-      align-items: center;
     }
 
     .nav-link:hover { color: var(--kuro-text); }
@@ -2246,171 +2196,9 @@
       opacity: 0.15;
     }
 
-    /* ===================================================
-       WEBGL SHADER CANVAS
-    =================================================== */
-    #kuro-shader {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      display: block;
-    }
-
-    /* ===================================================
-       DOT NAVIGATION — lateral section indicator
-    =================================================== */
-    #dot-nav {
-      position: fixed;
-      right: clamp(16px, 2.5vw, 28px);
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 90;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      pointer-events: auto;
-      opacity: 0;
-      transition: opacity 600ms var(--ease-out-expo);
-    }
-
-    #dot-nav.is-visible { opacity: 1; }
-
-    .dot-nav-item {
-      position: relative;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      touch-action: manipulation;
-    }
-
-    .dot-nav-pip {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.18);
-      transition: width 300ms var(--ease-out-expo),
-                  height 300ms var(--ease-out-expo),
-                  background 300ms var(--ease-out-expo),
-                  border-radius 300ms var(--ease-out-expo);
-    }
-
-    .dot-nav-item.is-active .dot-nav-pip {
-      width: 2px;
-      height: 16px;
-      border-radius: 2px;
-      background: var(--kuro-ember);
-    }
-
-    .dot-nav-item:hover .dot-nav-pip {
-      background: rgba(255, 255, 255, 0.45);
-    }
-
-    .dot-nav-label {
-      position: absolute;
-      right: calc(100% + 8px);
-      top: 50%;
-      transform: translateY(-50%) translateX(4px);
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--kuro-muted);
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 200ms ease, transform 200ms var(--ease-out-expo);
-    }
-
-    .dot-nav-item:hover .dot-nav-label {
-      opacity: 0.7;
-      transform: translateY(-50%) translateX(0);
-    }
-
-    @media (max-width: 768px) {
-      #dot-nav { display: none; }
-    }
-
-    /* ===================================================
-       CONCEPT CARDS — animated ember border on hover
-    =================================================== */
-    @property --card-angle {
-      syntax: '<angle>';
-      initial-value: 0deg;
-      inherits: false;
-    }
-
-    @keyframes card-border-spin {
-      to { --card-angle: 360deg; }
-    }
-
-    .concept-item {
-      position: relative;
-    }
-
-    .concept-item::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: var(--radius-md);
-      background: conic-gradient(
-        from var(--card-angle),
-        transparent 0deg,
-        transparent 300deg,
-        rgba(255, 77, 28, 0.55) 348deg,
-        transparent 360deg
-      );
-      opacity: 0;
-      transition: opacity 400ms var(--ease-out-expo);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .concept-item:hover::before {
-      opacity: 1;
-      animation: card-border-spin 3s linear infinite;
-    }
-
-    /* Ensure content stays above the border pseudo-element */
-    .concept-item > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ===================================================
-       SECTION SIGNATURE ANIMATIONS
-    =================================================== */
-    /* clip-path reveal — used on manifesto */
-    [data-sig="clip"] {
-      clip-path: inset(0 0 100% 0);
-      transition: clip-path 900ms var(--ease-out-expo);
-    }
-    [data-sig="clip"].sig-active {
-      clip-path: inset(0 0 0% 0);
-    }
-
-    /* scale-from-center — used on process */
-    [data-sig="scale"] {
-      opacity: 0;
-      transform: scale(0.96);
-      transition: opacity 700ms var(--ease-out-expo),
-                  transform 700ms var(--ease-out-expo);
-    }
-    [data-sig="scale"].sig-active {
-      opacity: 1;
-      transform: scale(1);
-    }
-
   </style>
 </head>
 <body>
-
-<a href="#main" class="skip-link">Skip to content</a>
 
 <!-- AMBIENT GRADIENT BACKGROUND -->
 <div id="ambient-top" aria-hidden="true"></div>
@@ -2433,18 +2221,6 @@
 <div id="cursor-dot"  aria-hidden="true"></div>
 <div id="cursor-ring" aria-hidden="true"></div>
 <div id="cursor-glow" aria-hidden="true"></div>
-
-<!-- WEBGL SHADER BACKGROUND -->
-<canvas id="kuro-shader" aria-hidden="true"></canvas>
-
-<!-- LATERAL DOT NAVIGATION -->
-<nav id="dot-nav" aria-label="Section navigation">
-  <button class="dot-nav-item" data-target="main"    aria-label="Hero">    <span class="dot-nav-pip"></span><span class="dot-nav-label">Hero</span></button>
-  <button class="dot-nav-item" data-target="studio"  aria-label="Studio">  <span class="dot-nav-pip"></span><span class="dot-nav-label">Studio</span></button>
-  <button class="dot-nav-item" data-target="work"    aria-label="Work">    <span class="dot-nav-pip"></span><span class="dot-nav-label">Work</span></button>
-  <button class="dot-nav-item" data-target="process" aria-label="Process"> <span class="dot-nav-pip"></span><span class="dot-nav-label">Process</span></button>
-  <button class="dot-nav-item" data-target="cta-sec" aria-label="Contact"> <span class="dot-nav-pip"></span><span class="dot-nav-label">Contact</span></button>
-</nav>
 
   <!-- ================================================
        NAV
@@ -2473,9 +2249,13 @@
   <!-- ================================================
        HERO (4.1)
   ================================================ -->
-  <section class="hero" id="main" aria-labelledby="hero-heading">
+  <section class="hero" aria-labelledby="hero-heading">
     <span class="hero-frame-counter" id="hero-frame-counter" aria-hidden="true">▶ 001 · 60fps</span>
     <div class="hero-inner">
+      <div class="hero-pill" aria-label="Studio">
+        <span class="hero-pill-dot" aria-hidden="true"></span>
+        Motion Studio · 2026
+      </div>
       <h1 class="hero-headline" id="hero-heading" data-glow>
         <span class="reveal reveal-d0">We</span>
         <span class="reveal reveal-d1">don't</span>
@@ -2607,7 +2387,7 @@
   <!-- ================================================
        STUDIO (4.2)
   ================================================ -->
-  <section class="studio" id="studio" aria-labelledby="studio-heading">
+  <section class="studio" aria-labelledby="studio-heading">
     <div class="studio-inner">
       <p class="section-label clip-reveal">Studio</p>
       <div class="studio-grid">
@@ -2623,7 +2403,7 @@
           </div>
         </div>
 
-        <div class="studio-text scroll-reveal" data-col="right" data-sig="clip">
+        <div class="studio-text scroll-reveal" data-col="right">
           <h2 class="studio-headline" id="studio-heading">
             KURO is a motion design studio crafting <span class="text-ember">kinetic identities</span> for ambitious brands.
           </h2>
@@ -2821,7 +2601,7 @@
     <div class="processo-inner" id="processo-inner">
       <p class="section-label clip-reveal">Process</p>
       <div class="processo-timeline" id="processo-timeline" aria-hidden="true"></div>
-      <div class="processo-grid" data-sig="scale">
+      <div class="processo-grid">
 
         <!-- 01 Brief -->
         <div class="processo-step scroll-reveal" data-glow data-delay="0">
@@ -2981,7 +2761,7 @@
   <!-- ================================================
        CTA (4.8)
   ================================================ -->
-  <section class="cta" id="cta-sec" aria-labelledby="cta-heading">
+  <section class="cta" aria-labelledby="cta-heading">
     <span class="cta-bg-word" aria-hidden="true">KURO</span>
     <div class="cta-inner" data-glow>
       <h2 class="cta-h2 scroll-reveal" id="cta-heading">Start a <span class="text-ember">conversation.</span></h2>
@@ -3111,27 +2891,19 @@
     }
 
     if (nav && scrollProgressBar) {
-      let rafPending = false;
-
       window.addEventListener('scroll', () => {
-        if (rafPending) return;
-        rafPending = true;
-        requestAnimationFrame(() => {
-          // Nav blur
-          nav.classList.toggle('scrolled', window.scrollY > 80);
+        // Nav blur
+        nav.classList.toggle('scrolled', window.scrollY > 80);
 
-          // Progress bar
-          const scrollable = document.body.scrollHeight - window.innerHeight;
-          const progress   = scrollable > 0 ? window.scrollY / scrollable : 0;
-          scrollProgressBar.style.transform = `scaleX(${Math.min(progress, 1)})`;
+        // Progress bar
+        const scrollable = document.body.scrollHeight - window.innerHeight;
+        const progress   = scrollable > 0 ? window.scrollY / scrollable : 0;
+        scrollProgressBar.style.transform = `scaleX(${Math.min(progress, 1)})`;
 
-          // Hero parallax — subtle factor (0.12) to honour "Stillness is design"
-          if (heroInner && !REDUCED_MOTION) {
-            heroInner.style.transform = `translateY(${window.scrollY * 0.12}px)`;
-          }
-
-          rafPending = false;
-        });
+        // Hero parallax
+        if (heroInner && !REDUCED_MOTION) {
+          heroInner.style.transform = `translateY(${window.scrollY * 0.3}px)`;
+        }
       }, { passive: true });
     }
 
@@ -3728,260 +3500,6 @@
           });
         }, 220);
       });
-    })();
-
-
-    /* ================================================
-       WEBGL SHADER BACKGROUND
-       Fragment shader: flow field noise, ember palette
-       Uniforms: u_time, u_mouse, u_scrollY, u_totalH, u_res
-       Strategy: fixed viewport canvas + page-Y coordinate
-       computed in shader → different look top/mid/bottom
-       without the cost of a full-page canvas.
-    ================================================ */
-    (function initShader() {
-      const canvas = document.getElementById('kuro-shader');
-      if (!canvas) return;
-
-      const gl = canvas.getContext('webgl', { alpha: false, antialias: false, powerPreference: 'low-power' });
-      if (!gl) { canvas.style.display = 'none'; return; }
-
-      const VS = `
-        attribute vec2 a_pos;
-        void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
-      `;
-
-      const FS = `
-        precision mediump float;
-        uniform float u_time;
-        uniform vec2  u_mouse;
-        uniform float u_scrollY;   // raw window.scrollY in pixels
-        uniform float u_totalH;    // document.documentElement.scrollHeight
-        uniform vec2  u_res;       // viewport dimensions
-
-        vec2 hash2(vec2 p) {
-          p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
-          return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
-        }
-
-        float noise(vec2 p) {
-          vec2 i = floor(p);
-          vec2 f = fract(p);
-          vec2 u = f * f * (3.0 - 2.0 * f);
-          return mix(
-            mix(dot(hash2(i + vec2(0,0)), f - vec2(0,0)),
-                dot(hash2(i + vec2(1,0)), f - vec2(1,0)), u.x),
-            mix(dot(hash2(i + vec2(0,1)), f - vec2(0,1)),
-                dot(hash2(i + vec2(1,1)), f - vec2(1,1)), u.x), u.y);
-        }
-
-        float fbm(vec2 p, int oct) {
-          float v = 0.0, a = 0.5;
-          for (int i = 0; i < 6; i++) {
-            if (i >= oct) break;
-            v += a * noise(p);
-            p  = p * 2.1 + vec2(1.7, 9.2);
-            a *= 0.5;
-          }
-          return v;
-        }
-
-        void main() {
-          // Screen UV (0..1, y=0 at top)
-          vec2 uv   = gl_FragCoord.xy / u_res;
-          uv.y      = 1.0 - uv.y;
-
-          // Page-Y: where this pixel sits in the full document (0=top, 1=bottom)
-          // gl_FragCoord.y is 0 at bottom of viewport, u_res.y at top
-          float pixelPageY = u_scrollY + (u_res.y - gl_FragCoord.y);
-          float pageY      = clamp(pixelPageY / max(u_totalH, 1.0), 0.0, 1.0);
-
-          // Zone weights (smooth transitions between three zones)
-          float zTop = 1.0 - smoothstep(0.0,  0.35, pageY);   // 0→0.35
-          float zMid = smoothstep(0.2, 0.45, pageY)            // peaks 0.4–0.6
-                     * (1.0 - smoothstep(0.55, 0.80, pageY));
-          float zBot = smoothstep(0.65, 0.90, pageY);          // 0.65→1.0
-
-          float t = u_time * 0.10;
-
-          // Mouse pull
-          float mDist = length(uv - u_mouse);
-          float mPull = smoothstep(0.55, 0.0, mDist) * 0.14;
-
-          // Flow field — frequency increases toward bottom (denser, more chaotic)
-          float freq = mix(2.2, 3.8, pageY);
-          vec2  q    = uv * freq;
-          q.x += u_mouse.x * 0.25;
-          q.y += pageY * 1.4;           // shift field vertically with page position
-
-          int oct = int(mix(3.0, 5.0, pageY));  // more octaves further down
-          float f1 = fbm(q + t, 3);
-          float f2 = fbm(q + vec2(f1 * 1.2, f1 * 0.8) + t * 0.7, int(mix(3.0, 5.0, pageY)));
-          float f3 = fbm(q + vec2(f2 * 1.1, f2 * 0.9) + t * 1.1, 3);
-
-          float field = f3 + mPull;
-
-          // Base color: void, never pure black
-          vec3 void_col  = vec3(0.039, 0.039, 0.043);
-
-          // Ember #FF4D1C
-          vec3 ember_col = vec3(1.0, 0.302, 0.11);
-
-          // Deep ember: darker, more saturated red for the bottom zone
-          vec3 deep_col  = vec3(0.72, 0.08, 0.04);
-
-          // Glow budget per zone:
-          // Top   → very subtle, only from field peaks (hero glow aesthetic)
-          // Mid   → medium ember intensity, flow field active
-          // Bot   → deep saturated red, stronger field warp
-          float glowTop = smoothstep(0.20, 0.60, field + 0.05) * 0.10;
-          float glowMid = smoothstep(0.05, 0.50, field + 0.12) * 0.20;
-          float glowBot = smoothstep(-0.05, 0.45, field + 0.18) * 0.28;
-
-          float glow    = glowTop * zTop + glowMid * zMid + glowBot * zBot;
-
-          // Hero-edge vignette (top-screen edge brightens slightly)
-          float heroEdge = (1.0 - smoothstep(0.0, 0.35, uv.y)) * zTop * 0.06;
-          glow += heroEdge;
-
-          // Color: ember for mid, deep ember for bottom
-          vec3 tint = mix(ember_col, deep_col, zBot * 0.6);
-
-          vec3 col = mix(void_col, tint, glow);
-
-          gl_FragColor = vec4(col, 1.0);
-        }
-      `;
-
-      function compile(type, src) {
-        const s = gl.createShader(type);
-        gl.shaderSource(s, src);
-        gl.compileShader(s);
-        return s;
-      }
-
-      const prog = gl.createProgram();
-      gl.attachShader(prog, compile(gl.VERTEX_SHADER,   VS));
-      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
-      gl.linkProgram(prog);
-      gl.useProgram(prog);
-
-      const buf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-      const aPos = gl.getAttribLocation(prog, 'a_pos');
-      gl.enableVertexAttribArray(aPos);
-      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-      const uTime    = gl.getUniformLocation(prog, 'u_time');
-      const uMouse   = gl.getUniformLocation(prog, 'u_mouse');
-      const uScrollY = gl.getUniformLocation(prog, 'u_scrollY');
-      const uTotalH  = gl.getUniformLocation(prog, 'u_totalH');
-      const uRes     = gl.getUniformLocation(prog, 'u_res');
-
-      let W = 0, H = 0;
-      function resize() {
-        W = canvas.width  = window.innerWidth;
-        H = canvas.height = window.innerHeight;
-        gl.viewport(0, 0, W, H);
-      }
-      resize();
-      window.addEventListener('resize', resize, { passive: true });
-
-      let mx = 0.5, my = 0.5;
-      let tmx = 0.5, tmy = 0.5;
-      window.addEventListener('mousemove', e => {
-        tmx = e.clientX / window.innerWidth;
-        tmy = e.clientY / window.innerHeight;
-      }, { passive: true });
-
-      let scrollY = 0;
-      window.addEventListener('scroll', () => {
-        scrollY = window.scrollY;
-      }, { passive: true });
-
-      let start = null;
-      function frame(ts) {
-        if (!start) start = ts;
-        const t = (ts - start) * 0.001;
-
-        // Lerp mouse
-        mx += (tmx - mx) * 0.05;
-        my += (tmy - my) * 0.05;
-
-        gl.uniform1f(uTime,    t);
-        gl.uniform2f(uMouse,   mx, my);
-        gl.uniform1f(uScrollY, scrollY);
-        gl.uniform1f(uTotalH,  document.documentElement.scrollHeight);
-        gl.uniform2f(uRes,     W, H);
-
-        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        requestAnimationFrame(frame);
-      }
-      requestAnimationFrame(frame);
-    })();
-
-
-    /* ================================================
-       LATERAL DOT NAVIGATION
-    ================================================ */
-    (function initDotNav() {
-      const nav   = document.getElementById('dot-nav');
-      if (!nav) return;
-
-      const items    = Array.from(nav.querySelectorAll('.dot-nav-item'));
-      const sectionIds = items.map(b => b.dataset.target);
-      const sections  = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
-
-      // Show nav after first scroll
-      let shown = false;
-      window.addEventListener('scroll', () => {
-        if (!shown && window.scrollY > 80) {
-          nav.classList.add('is-visible');
-          shown = true;
-        }
-      }, { passive: true });
-
-      // Click → scroll to section
-      items.forEach((btn, i) => {
-        btn.addEventListener('click', () => {
-          const target = document.getElementById(btn.dataset.target);
-          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      });
-
-      // IntersectionObserver → active pip
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          const idx = sections.indexOf(entry.target);
-          if (idx < 0) return;
-          items.forEach((b, i) => b.classList.toggle('is-active', i === idx));
-        });
-      }, { threshold: 0.4 });
-
-      sections.forEach(s => io.observe(s));
-    })();
-
-
-    /* ================================================
-       SECTION SIGNATURE ANIMATIONS (data-sig)
-    ================================================ */
-    (function initSigObserver() {
-      const els = document.querySelectorAll('[data-sig]');
-      if (!els.length) return;
-
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('sig-active');
-          } else {
-            entry.target.classList.remove('sig-active');
-          }
-        });
-      }, { threshold: 0.25 });
-
-      els.forEach(el => io.observe(el));
     })();
 
   </script>
